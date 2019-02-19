@@ -1,0 +1,56 @@
+%%
+%% This is file `bare_thesis.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% install/buptgraduatethesis.dtx  (with options: `bare-thesis')
+%% 
+%% This file is a part of the example of BUPTGraduateThesis.
+%% 
+
+\documentclass[mainbib,txmath]{BUPTthesis}
+\usepackage{zh_CN-Adobefonts_external}
+
+\usepackage{lineno}
+
+\addbibresource{paper_reference.bib}
+
+\newcommand{\gls}[1]{#1}
+\input{metadata}
+
+\begin{document}
+% \linenumbers 
+
+\maketitle
+\frontmatter                            % only in book class (roman page #s)
+\include{paper_abstract}
+
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+\listoftables
+\include{notations}
+
+\mainmatter
+\include{paper_1}
+\include{paper_2}
+\include{paper_3}
+\include{paper_4}
+\include{paper_final}
+
+% \chapterbib
+\mainbib
+
+\appendix
+% \include{app_abbreviation}
+% \include{app_lhospital}
+
+\backmatter
+\include{paper_thanks}
+% %% 在读期间论文发表情况
+\include{paper_pubs}
+
+\end{document}
