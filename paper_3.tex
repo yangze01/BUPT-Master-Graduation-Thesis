@@ -133,7 +133,8 @@ Seg(x^{(k)},y_i)=\left\{
 \right.
 \end{displaymath}
 
-在本模型中，$margin(x^{(k)},y_i)$代表标签$y_i$与案情$x^{(k)}$相关的软边界。$margin(x^{(k)},y_i)>0$ 代表$x^{(k)}$被正确分类为$y_i$，$margin(x^{(k)},y_i)<0$代表标签$y_i$和$x^{(k)}$不相关。之后本模型使用下面的函数决定所有样本案例的每个标签：
+在本模型中，$margin(x^{(k)},y_i)$代表标签$y_i$与案情$x^{(k)}$相关的软边界。$margin(x^{(k)},y_i)>0$ 代表$x^{(k)}$被正确分类为$y_i$，$margin(x^{(k)},y_i)<0$代表标签$y_i$和$x^{(k)}$不相关。
+之后本模型使用下面的函数决定所有样本案例的每个标签：
 \begin{equation}\label{eq:dyn}
 l_{dyn}=\sum_{x^{(k)}\in X}\sum_{y_i\in Y^{(k)}}\log\left[1+exp(-margin(x^{(k)},y_i))\right]
 \end{equation}
