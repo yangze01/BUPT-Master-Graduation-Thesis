@@ -126,7 +126,7 @@ $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关
 
 \subsection{基于神经网络的表示方法}
 随着神经网络技术的发展，Bengio等人尝试使用神经网络进行自然语言建模\cite{BengioDV00}，在此基础上，Mikolov等人提出了Word2Vec方法\cite{abs-1301-3781}，采用 CBOW和Skip-gram方法，进行语言模型建模，CBOW使用上下文对目标词进行预测，Skip-gram通过目标词对上下文进行预测，在此基础上得到的词语义文本表达，在自然语言的各个领域，取得了非常好的效果。fastText~\cite{GraveMJB17}根据word2vec思想，对文本进行建模实现分类。其模型如图~\ref{fig:fasttext}所示：
-\begin{figure*}[t!]
+\begin{figure*}[htb]
     \centering
     \includegraphics[scale=0.25, clip=true]{./sources/fasttext.eps}
     \vspace{-10pt}
@@ -138,7 +138,7 @@ $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关
 
 随着 CNN/RNN 的研究不断增多，越来越多的模型使用这些方法对文本进行建模。 Kim 等人
 提出基于卷积神经网络的文本分类方法~\cite{Kim14}，其模型结构如图~\ref{fig:textcnn}所示：
-\begin{figure}[t!]
+\begin{figure}[htb]
     \centering
     \includegraphics[scale=0.33, clip=true]{./sources/textcnn.eps}
     \vspace{-10pt}
@@ -152,7 +152,7 @@ $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关
 \section{注意力机制}
 
 注意力机制是一种广泛应用在深度学习的各个领域的机制，其本质是一种特征加权的方式，注意力在自然语言处理领域的应用最早是在机器翻译领域\cite{bahdanau2014neural}，传统的机器翻译模型通常由编码器-解码器结构组成，编码层即文本表示层，采用文本表示模型对文本进行编码，将输入语句转换成文本表示向量，之后通过解码器对该向量进行解码，将该向量翻译成目标语言。最基本的编码器-解码器结构由RNN构成，RNN由于本身结构的限制，无法得到文本序列的长期依赖，因此，为了解决这个问题，机器翻译模型引入了注意力机制，通过在不同解码阶段不同词重要性的不同，对文本向量进行加权，将语义信息集中在需要的部分。最基本的注意力机制模型如图~\ref{fig:attention}所示：
-\begin{figure}[t!]
+\begin{figure}[htb]
     \centering
     \includegraphics[scale=0.33, clip=true]{./sources/attention.eps}
     \vspace{-10pt}
@@ -185,7 +185,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 \subsection{参数硬共享}
 在硬参数共享是神经网络中最常用的方法。它通常用来在所有任务之间共享隐层参数，仅仅保持不同任务的输出层不同，其模型结果如图~\ref{fig:hard_share}：
 
-\begin{figure}[t!]
+\begin{figure}[htb]
     \centering
     \includegraphics[scale=0.5, clip=true]{./sources/hard_share.eps}
     \vspace{-10pt}
@@ -199,7 +199,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 \subsection{参数软共享}
 在参数软共享模型中，每个模型都由自己的参数。不同模型参数之间的距离通过正则化来让共享层参数更加接近，其模型结构如图~\ref{fig:soft_share}：
 
-\begin{figure*}[t!]
+\begin{figure*}[htb]
     \centering
     \includegraphics[scale=0.5, clip=true]{./sources/soft_share.eps}
     \vspace{-10pt}
