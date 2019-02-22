@@ -7,7 +7,6 @@
             "-synctex=1",
             "-interaction=nonstopmode",
             "-file-line-error",
-            "-pdf",
             "%DOC%"
         ]
     },
@@ -93,5 +92,7 @@
   "*.xml"
   ],
   "latex-workshop.view.pdf.viewer": "tab",
-  "latex-workshop.latex.autoClean.run": "onBuilt"
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.latex.autoBuild.onSave.enabled": false,
+//   "latex-workshop.latex.autoBuild.run": "never",
   }
