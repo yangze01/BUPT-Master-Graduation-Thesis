@@ -19,8 +19,8 @@
 \label{sec:ran_intro}
 法条语义信息（例如，法条的定义）为法官进行正确的决策提供了有效的属性信息。表~\ref{t:similar_article}展示了两个相似的法条。具体来讲，给定案情描述，对法官来说，一个正常的步骤是法官首先浏览案情，之后浏览所有的法条，挑选与给定案情相关的候选法条（例如，刑法第263条和刑法第264条都与盗窃罪相关，它们在法条定义中有相似的文本描述）。之后通过对案情和候选法条进行详细的语义分析最终挑选正确的法条。这个过程往往会重复若干次之后才能得到最终的判决结果。
 
-\begin{table}[t!]
-    \caption{法条定义中相关法条}
+\begin{table}[htb]
+    \caption{相关法条变}
     \label{t:similar_article}
     \centering
     \begin{tabular}{lp{12cm}p{7cm}}
@@ -33,18 +33,26 @@
 
 之前的工作，通常忽略了标签语义信息进行预测。此外，案情与法条语义之间的重复迭代信息被忽略，因此之前的算法性能是十分有限的。在本章中，为了解决这些问题，本课题提出了一种递归注意力网络（简称RNN）。具体来讲，RAN利用LSTM将案情描述和法条定义映射到一个低维空间。自注意力机制用来获取案情和法条自身的内部信息。协同注意力机制用来选择有效的语义信息对案情和法条进行正确的匹配。最后一个递归单元用来建模案情和法条之间的交互信息。
 
+总体来说，本章主要贡献如下：
+\begin{itemize}
+    \item 本章将判决预测问题转换为匹配问题，以便分析法条定义与案情描述之间的语义信息。
+    \item 本章设计了一种新型递归单元用于建模法条定义与案情描述之间的重复语义交互信息。
+    \item 本章在真实数据上进行了有效的实验验证，本章模型结果有效超过了基线模型，进一步的分析证明了本章提出的递归注意力机制方法的有效性。
+\end{itemize}
 
 \section{RAN算法设计}
 \label{sec:ran_algori}
 
 在本节中，针对提出了RAN模型进行详细的介绍，其模型结果如图~\ref{fig:ran_model}，之后对算法的学习和预测过程进行介绍。
-\begin{figure*}[t!]
+\begin{figure*}[htbp]
     \centering
-    \includegraphics[scale=0.52,viewport=0 30 980 500,clip=true]{./sources/ran.eps}
+    \includegraphics[scale=0.45,viewport=0 30 980 500,clip=true]{./sources/RAN.eps}
     \vspace{-10pt}
-    \caption{\label{fig:ran_model} The overall architecture of the proposed Recurrent Attention Model (RAN). }
+    \caption{\label{fig:ran_model} 递归注意力网络(RAN)模型结构图 }
     \vspace{-5pt}
 \end{figure*}
+
+RAN模型主要包含四层，编码层利用\textbf{LSTM}将案情描述和法条定义映射到低维语义空，自注意力机制产出两者的加权特征表达，递归层建模法官交替阅读案情描述和法条的过程，以便获得重复的交替语义特征，最后输出层产出模型的预测结果。
 
 \subsection{编码层}
 让 $x^{(i)} = {\{w_1, w_2, w_3, \dots, w_m\}}$表示有$m$个词的案情描述， $l^{(j)} = {\{w_1, w_2, w_3, \dots, w_n\}}$表示有$n$个词的法条定义，$w_i$代表第$i$个词的词袋表示，让$\textbf{V}^I=\{\vec{v}^I_t\in \mathbb{R}^{D_v}|t=1,\dots,N\}$表示所有词向量的连续空间。
@@ -76,7 +84,7 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 \end{equation}
 
 其中，$Q,K,V$代表打包的查询，键值，$d_k$和$d_v$代表查询和值的维度，投影$W_i^Q \in \mathbb{R}^{d_{model} \times d_k}, W_i^K 
-\in \mathbb{R}^{d_{model} \times d_k},W_i^V \in \mathbb{R}^{d_{model} \times d_v}, W^O \in \mathbb{R}^{hd_v \times d_{model}}$是参数矩阵。利用自注意力机制，本课题将$\textbf{H}_e^i$和$\textbf{H}_a^j$映射到另外一个相当大小的序列空间 $\textbf{H}_{e,s}^{(i)} = [\vec{v}_{e,s}^{(i)}(1), \vec{v}_{e,s}^{(i)}(2), \dots, \vec{v}_{a,s}^{(t)}(t)]$. and $\textbf{H}_{a,s}^{(j)}=[\vec{v}_{a,s}^{(j)}(1), \vec{v}_{a,s}^{(j)}(2), \dots, \vec{v}_{a,s}^{(j)}(t)]$。
+\in \mathbb{R}^{d_{model} \times d_k},W_i^V \in \mathbb{R}^{d_{model} \times d_v}, W^O \in \mathbb{R}^{hd_v \times d_{model}}$是参数矩阵。利用自注意力机制，本课题将$\textbf{H}_e^i$和$\textbf{H}_a^j$映射到另外一个相当大小的序列空间 $\textbf{H}_{e,s}^{(i)} = [\vec{v}_{e,s}^{(i)}(1), \vec{v}_{e,s}^{(i)}(2), \dots, \vec{v}_{a,s}^{(t)}(t)]$. 和 $\textbf{H}_{a,s}^{(j)}=[\vec{v}_{a,s}^{(j)}(1), \vec{v}_{a,s}^{(j)}(2), \dots, \vec{v}_{a,s}^{(j)}(t)]$。
 \subsection{递归层}
 在司法领域，法官需要仔细阅读案情描述以便获得重要信息，以便找出相关法条作为候选，之后针对案情描述和相关法条进行详细的分析，得到最终的判决结果，这个过程通过需要重复多次来进行最后的决策。与Cui等人\cite{CuiCWWLH17}提出的不同，不是利用简单的源文本到目标文本之间的交互信息，本课题设计了一种递归注意力机制单元用于建模法官的重复阅读行为。
 
@@ -146,7 +154,7 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
         & \vec{v}_{e,r}^{(i)} = g(H_{e,r}^{(i)}) = \frac{1}{m}\sum\limits_{t}\vec{v}_{e,r}^{(i)}(t) \\
         & \vec{v}_{a,r} = g(H_{a,r}) = \frac{1}{m}\sum\limits_{t}\vec{v}_{a,r}(t) \\
         & \vec{v}_{f}^{(i)} = \vec{v}_{e,r}^{(i)} \oplus \vec{v}_{a,r} \\
-        & \vec{v}_{o}^{(i)} = \textbf{W}^{o}\vec{v}_{o}^{(i)} + b^{o}
+        & \vec{v}_{o}^{(i)} = \textbf{W}^{o}\vec{v}_{f}^{(i)} + b^{o}
     \end{aligned}
 \end{equation}
 
@@ -164,8 +172,8 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 其中$\sigma$是sigmoid函数$\sigma(x)=\frac{1}{1 + e^{-x}}$，$Y^{(i)}(j) \in \{0, 1\}$是针对实例$x^{(i)}$的第$j$个标签的真实值。
 
 使用学习到的参数，分类策略如算法~\ref{alg:ran_algo}所示：
-\begin{algorithm}[htbp]
-    \caption{Framework of joint learning for our model}
+\begin{algorithm}[htb]
+    \caption{RAN模型学习框架}
     \label{alg:ran_algo}
     \begin{algorithmic}[1]
     % \Require
@@ -174,7 +182,7 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
     % Ensemble of classifiers on former batches, $E_{n-1}$;
     % \Ensure
     % Ensemble of classifiers on the current batch, $E_n$;
-    \State Initialize model $\Theta=\{\textbf{W}^{D_V\times |C|},\textbf{V}$\} randomly
+    \State 随机初始化模型参数 $\Theta=\{\textbf{W}^{D_V\times |C|},\textbf{V}$\}
     \label{code:fram:initialize parameters}
     \State iter = 0
     \label{code:fram:begin}
@@ -184,9 +192,9 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
         \label{code:fram:re_value}
         \For{$i = 1,...,|X|$}
         \label{code:fram:for1}
-            \State for instance $x^{(i)}$
+            \State 针对实例 $x^{(i)}$
             \label{code:fram:task_join1}
-            \State encode evidence and article $H_e^{(i)}$, $H_a$
+            \State 编码案情描述和法条定义 $H_e^{(i)}$, $H_a$
             \label{code:fram:encode}
             % \State self attention encode
             % \label{code:fram:self_at_encode}
@@ -196,16 +204,16 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
             \label{code:fram:repeat_recurrent}
                 \State $n_{layer} \leftarrow n_{layer} - 1$ 
                 \label{code:fram:iter_layer}
-                \State compute the interaction information
+                \State 计算交互信息
                 \label{code:fram:compute_iteraction}
             \Until{$n_{layer} < 0$}
-            \State compute the gradient $\nabla(\theta)$ of Equation(\ref{eq:loss})
+            \State  通过公式(\ref{eq:loss})计算模型梯度$\nabla(\theta)$
             \label{code:fram:com_grad}
-            \State update model $\theta \leftarrow \theta + \epsilon \nabla(\theta)$
+            \State 通过$\theta \leftarrow \theta + \epsilon \nabla(\theta)$更新模型参数
             \label{code:fram:update_grad}
         \EndFor
         
-    \Until{(Coverage or $t > num$)}
+    \Until{(收敛或者$t > num$)}
     \State
     \Return $\{\textbf{W}^{D_V\times |C|},\textbf{V}^I\}$;
     \end{algorithmic}
@@ -234,18 +242,19 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 \end{itemize}
 
 三个数据集的统计分析如表~\ref{t:ran_statistic}所示。最后本课题将所有数据以$8:2$划分为不重叠的两部分，训练集和测试机。
-\begin{table*}[htbp]
-    \centering
-    \caption{Basic statistics of the three datasets for experiments.}
-    \label{t:ran_statistic}
-    \begin{tabular}{ccccc}
-    \hline
-    datasets   & number of samples & relevant articles & average fact description length & average article size \\ \hline
-    CJO        & 114,576            & 137               & 825                             & 1.17                \\
-    CAIL small & 204,231            & 183               & 263                             & 1.27                 \\
-    CAIL2018   & 1,710,856           & 183               & 279                             & 1.04                \\  \hline
-    \end{tabular}
-\end{table*}
+\begin{table}[htb]
+\centering
+\caption{三个数据集统计表}
+\label{t:ran_statistic}
+\begin{tabular}{lllll}
+\hline
+\multirow{2}{*}{数据集} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}样本\\ 个数\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}法条\\ 个数\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}平均案情\\ 描述长度\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}平均\\ 标签个数\end{tabular}} \\
+                     &                                                                  &                                                                  &                                                                      &                                                                    \\ \hline
+CJO                  & 114,576                                                          & 137                                                              & 825                                                                  & 1.17                                                               \\
+CAIL small           & 204,231                                                          & 183                                                              & 263                                                                  & 1.27                                                               \\
+CAIL2018             & 1,710,856                                                        & 183                                                              & 279                                                                  & 1.04                                                               \\ \hline
+\end{tabular}
+\end{table}
 
 
 \subsection{模型评估}
@@ -261,15 +270,15 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 
 \section{实验结果}
 \label{sec:ran_exper_result}
-\subsection{Comparison against Baselines}
-本课题将提出的\textbf{SAN}模型与baseline进行了对比，在三个数据集上的性能结果如表~\ref{ran_main}所示，MP，MR，MF和JS分别代表Macro-P，Macro-R，Macro-F1和杰卡德相关系数（所有数值的百分比符号均被省略）。每行最好的实验结果用下划线进行了标注，最后一列代表与最好的基线模型相关性能提升的多少。
-\begin{table*}[htbp]
+\subsection{与基线模型的实验对比}
+本课题将提出的\textbf{SAN}模型与baseline进行了对比，在三个数据集上的性能结果如表~\ref{t:ran_main}所示：\begin{table*}[htbp]
     \centering
-    \caption{Comparison between our methods and all baselines on three datasets. }
+    \caption{RAN与基线模型实验比较表}
     \label{t:ran_main}
+    \setlength{\tabcolsep}{0.65mm}
     \begin{tabular}{@{}c|c|cccc|cc|c|c|c@{}}
         \toprule
-        \multirow{3}{*}{\textbf{Dataset}} & \multirow{3}{*}{\textbf{metrics}} & \multicolumn{4}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Shallow \\ Model\end{tabular}}}} & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Neural Network \\ Based Model\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Attention \\ Based Model\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Our\\ Model\end{tabular}}} & \multirow{3}{*}{\textbf{Improve}} \\
+        \multirow{3}{*}{\textbf{数据集}} & \multirow{3}{*}{\textbf{指标}} & \multicolumn{4}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}浅层 \\ 模型\end{tabular}}}} & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}神经网络 \\ 模型\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}注意力 \\ 模型\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}本\\ 模型\end{tabular}}} & \multirow{3}{*}{\textbf{提升}} \\
                                           &                                   & \multicolumn{4}{c|}{}                                                                                   & \multicolumn{2}{c|}{}                                                                                                &                                                                                            &                                                                               &                                   \\
                                           &                                   & MLKNN                    & BR                       & CC                      & SVM                     & TextCNN                                                   & BiLSTM                                                   & DPAM                                                                                       & RAN                                                                          &                                   \\ \midrule
                                           & MP                                & 59.49                    & 74.28                    & 72.33                   & 67.68                   & 78.53                                                     & 78.81                                                    & 79.39                                                                                      & \underline{\textbf{81.34}}                                                                & \textbf{1.95}                     \\
@@ -286,6 +295,9 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
                                           & JS                                & 70.28                    & 88.34                    & 90.57                   & 90.92                   & 94.61                                                     & 94.61                                                    & 94.39                                                                                      & \underline{\textbf{94.68}}                                                                & \textbf{0.29}                     \\ \bottomrule
         \end{tabular}
 \end{table*}
+
+其中MP，MR，MF和JS分别代表Macro-P，Macro-R，Macro-F1和杰卡德相关系数（所有数值的百分比符号均被省略）。每行最好的实验结果用下划线进行了标注，最后一列代表与最好的基线模型相关性能提升的多少。
+
 本课题将对比的模型分为三个大类别，浅层模型，基于神经网络的模型以及基于注意力机制的模型。从结果中，可以得到以下结论：
 \begin{itemize}
     \item 毫不惊讶，\textbf{MLKNN}和\textbf{BR}的在所有指标上结果最差，因为这两种方法将多标签分类转换为单标签分类。
@@ -300,18 +312,17 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 \section{分析与讨论}
 \label{sec:ran_analysis}
 本课题在模型上进行了进一步的分析。在本节中，本课题首先挖掘了递归层数对结果的影响，之后利用消融实验探索了不同模型层的有效性。
-\subsection{The impact of recurrent layer}
-\begin{figure*}
+\begin{figure*}[hbtp]
     \centering
     % \includegraphics[scale=0.5,viewport=0 30 980 500,clip=true]{./sources/n_layers.eps}
-    \includegraphics[scale=0.37, clip=true]{./sources/3_recurrent_layers2.eps}
+    \includegraphics[scale=0.39, clip=true]{./sources/3_recurrent_layers2.eps}
     \vspace{-10pt}
-    \caption{\label{fig:n_layers} The performance of different number of recurrent layers on three datasets. }
+    \caption{\label{fig:n_layers} 递归层数影响实验图}
     \vspace{-5pt}
 \end{figure*}
 
+\subsection{递归层影响分析}
 本课题在递归交互层数$n \in \{1,2,3,4\}$的情况下在三个数据集上进行实验，实验结果如图~\ref{fig:n_layers}所示，从结果可以得到以下结论：
-
 \begin{itemize}
     \item 随着递归层数的增多，结果有所提升。
     \item 当层数增加到一定程度，性能提升变得非常有限，并且需要更多的计算资源。
@@ -320,15 +331,15 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
 
 
 
-\subsection{Ablation test}
+\subsection{消融实验}
 为了进一步验证，本课题进行了不同程度的消融实验，将递归层移去（简称\textbf{R-r}），将自注意力层移去（简称R-s）分别进行实验。实验结果如表~\ref{t:ablation}所示：
 \begin{table}[htbp]
     \centering
     \label{t:ablation}
-    \caption{The ablation experiment on CAIL small.}
+    \caption{CAIL small数据集消融实验}
     \begin{tabular}{ccccccc}
         \hline
-        \textbf{Dataset}                                                                & \textbf{method} & \textbf{MP} & \textbf{MR}    & \textbf{MF}    & \textbf{JS} \\ \hline
+        \textbf{数据集}                                                                & \textbf{方法} & \textbf{MP} & \textbf{MR}    & \textbf{MF}    & \textbf{JS} \\ \hline
         \multirow{4}{*}{\textbf{CJO}}                                                   & \textbf{DPAM}   & 79.39       & 55.60 & 62.79  & 80.76       \\
                                                                                         & \textbf{R-s}    & 80.36       & 55.02 & 62.85  & 80.77       \\
                                                                                         & \textbf{R-r}    & 78.78       & 54.56 & 61.97  & 80.35       \\
@@ -343,6 +354,7 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
                                                                                         & \textbf{RAN}    & 77.69       & 58.69 & 64.88  & 94.68       \\ \hline
         \end{tabular}
 \end{table}
+
 本课题得到以下结论：\
 \begin{itemize}
     \item 仅仅保持自注意力层，实验结果比\textbf{DPAM}要差。这是由于缺乏标签相关信息无法有效区分易混淆的法条标签。

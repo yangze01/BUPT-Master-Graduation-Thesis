@@ -17,7 +17,7 @@
 
 
 给定事实描述，对于法官来说，一种通用的处理方法是他们首先浏览所有的法条，之后根据对案情描述的分析，得到被告人触犯了哪些法条。由于法条数量多而繁杂，因此快速定位相关法条是非常困难的。如表\ref{t:example}所示，事实描述是一段描述被告人的案情介绍或者事实证据，该被告人触犯了刑法第二百六十四条以及刑法第二百三十二条。本课题面向司法领域的多标签分类问题是以事实描述为输入，预测被告人可能涉及了哪些法条。
-\begin{table}[t!]
+\begin{table}[hbt]
     \caption{判决文书样例}
     \label{t:example}
     \centering
@@ -43,30 +43,24 @@
 \end{itemize}
 
 定义准确率($P$)和召回率($R$),及$F1$如下：
-\begin{eqnarray*}
-P=\frac{TP}{TP+FP}
-\end{eqnarray*}
-
-\begin{eqnarray*}
-R=\frac{TP}{TP+FN}
-\end{eqnarray*}
-
-\begin{eqnarray*}
-F1=\frac{2\times P \times R}{P+R}
-\end{eqnarray*}
+\begin{equation}
+    \begin{aligned}
+        &P=\frac{TP}{TP+FP}\\
+        &R=\frac{TP}{TP+FN}\\
+        &F1=\frac{2\times P \times R}{P+R}\\
+    \end{aligned}
+\end{equation}
 
 针对一般的二分类问题，可以用以上指标进行评价，而针对多标签分类问题，每个样本包含多个标签，即每个标签都是一个二分类问题，因此，我们需要综合考虑所有标签上的结果，本课题采用宏平均的方式对实验结果进行评价，计算结果如下：
-\begin{eqnarray*}
-Macro\textrm{-}P &=& \frac{1}{n}\sum_{i=1}^{n}P_{i}
-\end{eqnarray*}
 
-\begin{eqnarray*}
-Macro\textrm{-}R &=& \frac{1}{n}\sum_{i=1}^{n}R_{i}
-\end{eqnarray*}
+\begin{equation}
+    \begin{aligned}
+        & Macro\textrm{-}P &=& \frac{1}{n}\sum_{i=1}^{n}P_{i} \\
+        & Macro\textrm{-}R &=& \frac{1}{n}\sum_{i=1}^{n}R_{i} \\
+        & Macro\textrm{-}F1 &=& \frac{1}{n}\sum_{i=1}^{n}\frac{2\times Macro\textrm{-}P \times Macro\textrm{-}R}{Macro\textrm{-}P+Macro\textrm{-}R} \\
+    \end{aligned}
+\end{equation}
 
-\begin{eqnarray*}
-Macro\textrm{-}F1 &=& \frac{1}{n}\sum_{i=1}^{n}\frac{2\times Macro\textrm{-}P \times Macro\textrm{-}R}{Macro\textrm{-}P+Macro\textrm{-}R}
-\end{eqnarray*}
 其中，n代表多标签分类中标签的总个数，$P_i$，$R_i$分别代表第$i$个标签的准确率，召回率，由每类标签所有样本的真实类别和预测类别进行计算。
 \subsubsection{杰卡德相似系数}
 杰卡德相似系数是另一种常见的多标签分类评价指标，它用来评价真实标签集合和预测标签集合之间的相似度，它由两个标签集合的交并比定义，其定义如下：
@@ -102,7 +96,7 @@ $TF$ 和 $IDF$：
 $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关的，这造成了这类算法无法进行语义相关的判断。此外，向量的维度对应词表的大小，因此，向量维度随着词表增大而增大，由于样本的中所包含的词远远少于词表，因而造成了向量的高度稀疏。
 
 \subsection{基于主题模型的表示方法}
-为了更好地解决语义表示能力，研究者提出了潜在语义分析（LSA）方法~\cite{DeerwesterDLFH90}，LSA构建文档和词的共现矩阵，通过奇异值分解对原始矩阵降维，可以得到文档向量和词向量，假设A是word-document矩阵，矩阵每列对应一篇文章，每行是一个单词。 $B = A^{T}A$是 Document\textrm{-}Document 矩阵，如果文档 $i$ 和文档$j$有$b$个相同的单词，则$B[i,j]=b$。 $C = AA^{T}$是 Term\textrm{-}Term矩阵，如果单词$i$和单词$j$同时出现在一篇文档中的频率是$c$，则$C[i,j]=c$。对$A$进行SVD 分解：
+为了更好地解决语义表示能力，研究者提出了潜在语义分析（LSA）方法~\cite{DeerwesterDLFH90}，LSA构建文档和词的共现矩阵，通过奇异值分解对原始矩阵降维，可以得到文档向量和词向量，假设A是词\textrm{-}文档矩阵，矩阵每列对应一篇文章，每行是一个单词。 $B = A^{T}A$是 文档\textrm{-}文档矩阵，如果文档 $i$ 和文档$j$有$b$个相同的单词，则$B[i,j]=b$。 $C = AA^{T}$是词\textrm{-}词矩阵，如果单词$i$和单词$j$同时出现在一篇文档中的频率是$c$，则$C[i,j]=c$。对$A$进行SVD 分解：
 
 \begin{equation}
     A=U\sum V^{T}
@@ -128,7 +122,7 @@ $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关
 随着神经网络技术的发展，Bengio等人尝试使用神经网络进行自然语言建模\cite{BengioDV00}，在此基础上，Mikolov等人提出了Word2Vec方法\cite{abs-1301-3781}，采用 CBOW和Skip-gram方法，进行语言模型建模，CBOW使用上下文对目标词进行预测，Skip-gram通过目标词对上下文进行预测，在此基础上得到的词语义文本表达，在自然语言的各个领域，取得了非常好的效果。fastText~\cite{GraveMJB17}根据word2vec思想，对文本进行建模实现分类。其模型如图~\ref{fig:fasttext}所示：
 \begin{figure*}[htb]
     \centering
-    \includegraphics[scale=0.25, clip=true]{./sources/fasttext.eps}
+    \includegraphics[width=12cm,height=6cm, clip=true]{./sources/fasttext.eps}
     \vspace{-10pt}
     \caption{\label{fig:fasttext} fastText模型结构图}
     \vspace{-5pt}
@@ -138,23 +132,59 @@ $TF\textrm{-}IDF$这类向量空间表示法将各词之间架设为线性无关
 
 随着 CNN/RNN 的研究不断增多，越来越多的模型使用这些方法对文本进行建模。 Kim 等人
 提出基于卷积神经网络的文本分类方法~\cite{Kim14}，其模型结构如图~\ref{fig:textcnn}所示：
-\begin{figure}[htb]
+\begin{figure*}[htb]
     \centering
-    \includegraphics[scale=0.33, clip=true]{./sources/textcnn.eps}
+    \includegraphics[width=12.5cm,height=5.5cm,clip=true]{./sources/textcnn.eps}
     \vspace{-10pt}
     \caption{\label{fig:textcnn} TextCNN模型结构图}
     \vspace{-5pt}
-\end{figure}
+\end{figure*}
 
-该模型由卷积层，MaxPooling层，全连接层组成，该模型通过不同大小的卷积核提取不同窗口 N-gram特征，经过MaxPooling 将不同窗口特征拼接作为文本表达，由于CNN擅长提取局部特征，仅能获取局部信息，会损失一些语义信息。针对CNN的不足之处，研究者们提出了基于LSTM的神经网络，用来获取长距离依赖信息，通过将 LSTM 的隐层向量进行平均，得到文本表达。
+该模型由卷积层，MaxPooling层，全连接层组成，该模型通过不同大小的卷积核提取不同窗口 N-gram特征，经过MaxPooling 将不同窗口特征拼接作为文本表达，由于CNN擅长提取局部特征，仅能获取局部信息，会损失一些语义信息。针对CNN的不足之处，研究者们提出了RNN，LSTM模型，LSTM模型结果如图~\ref{fig:lstm}：
+\begin{figure*}[htb]
+    \centering
+    \includegraphics[width=12cm,height=5cm,clip=true]{./sources/lstm2.eps}
+    \vspace{-10pt}
+    \caption{\label{fig:lstm} LSTM模型结构图}
+    \vspace{-5pt}
+\end{figure*}
 
+LSTM，全称长短期记忆网络，是为了解决CNN等模型只能获取局部信息，无法有效获取序列长期依赖问题而提出来的，它主要包括遗忘门、输入门和输出门三部分。首先，该网络决定从前一步的细胞单元选择丢弃多少的信息，其计算过程如下：
+\begin{equation}
+    f_t = \sigma(W_f\dot[h_{t-1,x_t}] + b_f)
+\end{equation}
+
+其中，$h_{t-1}$代表前一步输出，$x_t$代表当前输入，$\sigma$代表sigmoid函数。
+
+之后模型通过输入门对信息进行更新，首先通过sigmoid层决定信息的更新比例；一个tanh层生成新的状态向量。之后结合两部分内容，对细胞状态进行更新，其计算过程如下：
+\begin{equation}
+    \begin{aligned}
+        & i_t = \sigma(W_i\dot[h_{t-1},x_t]+b_i) \\
+        & \tilde{C}_t=tanh(W_C\dot[h_{t-1},x_t]+b_C)
+    \end{aligned}
+\end{equation}
+
+结合前面的信息，通过下面的式子产生新的细胞状态：
+\begin{equation}
+    C_t=f_t*C_{t-1}+i_t*\tilde{C}_t
+\end{equation}
+
+最后，通过输出门，决定新的输出隐层状态，计算过程如下：
+\begin{equation}
+    \begin{aligned}
+        & \sigma_t=\sigma(W_o[h_{t-1},x_t]+b_o) \\
+        & h_t=o_t*tanh(C_t)\\
+    \end{aligned}
+\end{equation}
+
+采用基于神经网络的文本表示方法，能有效降低文本表示维度过高的问题，并且能够获取更多的文本语义信息，因此基于神经网络的文本表示是本课题采用的主要方式。
 
 \section{注意力机制}
 
 注意力机制是一种广泛应用在深度学习的各个领域的机制，其本质是一种特征加权的方式，注意力在自然语言处理领域的应用最早是在机器翻译领域\cite{bahdanau2014neural}，传统的机器翻译模型通常由编码器-解码器结构组成，编码层即文本表示层，采用文本表示模型对文本进行编码，将输入语句转换成文本表示向量，之后通过解码器对该向量进行解码，将该向量翻译成目标语言。最基本的编码器-解码器结构由RNN构成，RNN由于本身结构的限制，无法得到文本序列的长期依赖，因此，为了解决这个问题，机器翻译模型引入了注意力机制，通过在不同解码阶段不同词重要性的不同，对文本向量进行加权，将语义信息集中在需要的部分。最基本的注意力机制模型如图~\ref{fig:attention}所示：
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.33, clip=true]{./sources/attention.eps}
+    \includegraphics[width=9.5cm,height=9cm, clip=true]{./sources/attention.eps}
     \vspace{-10pt}
     \caption{\label{fig:attention} 注意力机制模型结构图}
     \vspace{-5pt}
@@ -187,7 +217,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.5, clip=true]{./sources/hard_share.eps}
+    \includegraphics[width=11cm,height=7cm, clip=true]{./sources/hard_share.eps}
     \vspace{-10pt}
     \caption{\label{fig:hard_share} 参数硬共享模型结构图}
     \vspace{-5pt}
@@ -201,7 +231,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[scale=0.5, clip=true]{./sources/soft_share.eps}
+    \includegraphics[width=14cm,height=6cm, clip=true]{./sources/soft_share.eps}
     \vspace{-10pt}
     \caption{\label{fig:soft_share} 参数软共享模型结构图}
     \vspace{-5pt}

@@ -25,28 +25,31 @@
 
 然而，这个问题是非常困难的，面临两个主要问题。一个问题是大多数案情描述涉及的法条数量是不确定的，
 称为标签动态问题。通过在大规模数据上对70个法条进行分析，案列包含的标签数量有很大差异，其结果如图~\ref{fig:dis1}所示：
-\begin{figure}[htbp]
+\begin{figure*}[htb]
 \centering
 % \includegraphics[scale=0.5,clip=true]{1.eps}
-\includegraphics[scale=0.5,viewport=0 0 450 350,clip=true]{./sources/1.eps}
-\caption{\label{fig:dis1}案例数据上法条集合大小分布于统计。x轴代表法条集合大小，y轴代表样本比例占比}
-\end{figure}
+\includegraphics[scale=0.48,viewport=0 0 450 350,clip=true]{./sources/1.eps}
+\caption{\label{fig:dis1}样本平均标签个数分布统计图}
+\end{figure*}
 
-另一个挑战是标签不均衡问题。如果一个多标签分类数据集上一部分数据的标签数量远远小于另一部分数据，那么这个多标签分类数据集被认为是不均衡的。针对同一份案例数据进行分析，其结果如图~\ref{fig:tail}所示。从图中可以看出，每种法条出现的数量符合长尾分布，这意味着很多法条很少在审判中被引用。大多数传统的多标签分类算法在训练过程中通过最小化整体分类误差来进行优化，这种方式假设所有标签拥有同等的重要性。这种假设使得分类算法在训练过程中偏向于向数量占比多的标签进行学习。虽然法条定义可以体现不同法条之间的一些相关信息用于缓解标签不均衡问题（例如表~\ref{t:relevant_article}所示，刑法第一百九十七条和刑法第一百九十一条是非常相似的。），但是目前在判决预测研究中没有工作考虑这方面的问题。
+从图中可以看出，案情描述对应的法条个数从2到14不等，具有很大的差异性，因此很难通过固定标签个数来进行法条预测。
 
-\begin{figure}[t!]
+另一个挑战是标签不均衡问题。如果一个多标签分类数据集上一部分数据的标签数量远远小于另一部分数据，那么这个多标签分类数据集被认为是不均衡的。针对同一份案例数据进行分析，其结果如图~\ref{fig:tail}所示，其中，x轴代表法条集合大小，y轴代表样本比例占比。
+
+\begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.5,clip=true]{./sources/2.eps}
-\caption{\label{fig:tail}Distribution of article set size over evidences. The x-axis stands for the sorted labels according their frequencies in the dataset, y-axis represents counts of labels.}
-\end{figure}
+\includegraphics[scale=0.48,clip=true]{./sources/2.eps}
+\caption{\label{fig:tail}样本标签出现次数统计图}
+其中，x代表按出现频次排序的标签，y代表标签出现的次数。
+\end{figure*}
 
 
-
-\begin{table}[t!]
+从图中可以看出，每种法条出现的数量符合长尾分布，这意味着很多法条很少在审判中被引用。大多数传统的多标签分类算法在训练过程中通过最小化整体分类误差来进行优化，这种方式假设所有标签拥有同等的重要性。这种假设使得分类算法在训练过程中偏向于向数量占比多的标签进行学习。虽然法条定义可以体现不同法条之间的一些相关信息用于缓解标签不均衡问题（例如表~\ref{t:relevant_article}所示，刑法第一百九十七条和刑法第一百九十一条是非常相似的。），但是目前在判决预测研究中没有工作考虑这方面的问题。
+\begin{table}[htb]
     \caption{法条定义中相关法条}
     \label{t:relevant_article}
     \centering
-    \begin{tabular}{lp{12cm}p{7cm}}
+    \begin{tabular}{lp{12cm}p{8cm}}
     \hline
     &\emph{\textbf{刑法第一百九十七条}: 使用伪造、变造的国库券或者国家发行的其他有价证券，进行\emph{\textbf{诈骗}}活动，数额较大的，处五年以下有期徒刑或者拘役... \newline
     \textbf{刑法第一百九十一条}: 明知是毒品犯罪、黑社会性质的组织犯罪、恐怖活动犯罪、走私犯罪、贪污贿赂犯罪、破坏金融管理秩序犯罪、\emph{\textbf{金融诈骗}}犯罪的所得及其产生的收益，为掩饰、隐瞒其来源和性质，有下列行为之一的，没收实施以上犯罪的所得及其产生的收益...}\\
@@ -54,18 +57,26 @@
     \end{tabular}
 \end{table}
 
-现有的很多多标签分类工作都引入了标签之间的关联信息，然而，这些工作都将多标签分类和阈值预测器分开学习，并且忽略了标签不均衡问题。为了处理这个问题，本课题提出了一种多任务学习框架用于联合学习多标签分类模型（简称\textbf{DPAM}）和阈值预测器。针对第二个问题，本课题采用法条描述信息来建模标签之间的成对关系，并针对标签集合构造软注意力机制矩阵，本课题的实验结果证明这种方法能有效缓解标签不均衡问题。
+现有的很多多标签分类工作都引入了标签之间的关联信息，然而，这些工作都将多标签分类和阈值预测器分开学习，并且忽略了标签不均衡问题。为了处理这个问题，本课题提出了一种多任务学习框架用于联合学习多标签分类模型（简称\textbf{DPAM}）和阈值预测器。针对第二个问题，本课题采用法条描述信息来建模标签之间的成对关系，并针对标签集合构造软注意力机制矩阵，最后通过设计一个多任务学习框架联合学习这两个任务，利用任务间的交互关系，提高模型泛化性能。
+
+总体来讲，本章工作的主要贡献如下：
+\begin{itemize}
+    \item 本课题首次在司法领域对案情描述和法条定义进行探索用于判决预测。
+    \item 本课题设计了一种多标签分类结构用于联合学习多标签分类器和阈值预测其，通过这种方式，DPAM可以通过利用相关任务包含的信息抑制模型的过拟合，提高模型的泛化性能。
+    \item 一种基于法条定义的承兑注意力模型被引用分类模型中，用于缓解标签不均衡问题。
+    \item 通过在两个真实数据集上的扩展实验，与基线模型继续宁对比，对本课题提出的DPAM模型进行验证。
+\end{itemize}
 
 \section{DPAM算法设计}
 \label{sec:dpam_algori}
 
 在本节中，本课题详细介绍提出的动态成对注意力机制模型。如图~\ref{fig:model}所示是\textbf{DPAM}模型架构图。具体来讲，本模型包含两部分：一个成对注意力机制模型（简称\textbf{PAM}）用于得到标签关联得分，一个动态阈值预测器得到参考阈值用于决定标签和给定案情描述是否相关。最后，采用多任务学习方法联合学习这两个任务。
 
-\begin{figure*}[t!]
+\begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.4,viewport=0 30 980 500,clip=true]{./sources/DPAM.eps}
+\includegraphics[scale=0.48,viewport=0 30 980 500,clip=true]{./sources/DPAM.eps}
 \vspace{-10pt}
-\caption{\label{fig:model} The overall architecture of the proposed Dynamic Pairwise Attention Model (DPAM). }
+\caption{\label{fig:model} 动态成对注意力机制模型结构图 }
 \vspace{-5pt}
 \end{figure*}
 
@@ -75,21 +86,21 @@
 
 更正式地，用$\textbf{V}^I=\{\vec{v}^I_j\in \mathbb{R}^{D_v}|j=1,\dots,N\}$表示在一个$D_v$维连续空间中的所有词向量。针对每个案情描述和标签定义，本模型采用如下方式将词向量聚合为案情表达和标签描述表达：
 
-$$
-\begin{aligned}
-\vec{v}^{(e,k)}&=g(\vec{v}^I_j:j\in x^{(k)})\\
-\vec{v}^{(l,i)}&=g(\vec{v}^I_j:j\in l^{(i)})\\
-\end{aligned}
-$$
+\begin{equation}
+    \begin{aligned}
+        \vec{v}^{(e,k)}&=g(\vec{v}^I_j:j\in x^{(k)})\\
+        \vec{v}^{(l,i)}&=g(\vec{v}^I_j:j\in l^{(i)})\\
+    \end{aligned}
+\end{equation}
 
-其中，$g(\cdot)$代表聚合函数。在本课题的工作中，使用TextCNN~\cite{Kim14}用于构造输入向量。给定案情描述$x^{(k)}$和标签定义$\mathcal{L}$，PAM考虑成对$(y_i,y_j)\in Y^{(k)}$条件概率如下：
+其中，$g(\cdot)$代表聚合函数。在本课题的工作中，使用TextCNN~\cite{Kim14}用于构造输入向量。给定案情描述$x^{(k)}$和标签定义$\mathcal{L}$，PAM考虑成对$(y_i,y_j)\in Y^{(k)}$条件概率计算公式如下：
 
-\begin{displaymath}
-P(y_i,y_j|x^{(k)},\mathcal{L})=P(y_i,y_j|x^{(k)})P(l^{(i)},l^{(j)})
-\end{displaymath}
+\begin{equation}
+    P(y_i,y_j|x^{(k)},\mathcal{L})=P(y_i,y_j|x^{(k)})P(l^{(i)},l^{(j)})
+\end{equation}
 其中，$P(y_i,y_j|x^{(k)})$ 和 $P(l^{(i)},l^{(j)})$ 分别进行计算。
 
-为了解决标签不均衡问题，本课题引入成对标签关联。众所周知，注意力模型在传统的序列建模，例如LSTM和GRU，采用软加权机制对子序列进行加权。为了提高稀疏成对标签的重要性，本课题将传统的注意力机制扩展到成对关系集合中，称为成对注意力机制。给定标签描述表达$\vec{v}^{(l,i)}$ 和 $\vec{v}^{(l,j)}$，成对注意力矩阵计算如下：
+为了解决标签不均衡问题，本课题引入成对标签关联信息。众所周知，注意力模型在传统的序列建模，例如LSTM和GRU，采用软加权机制对子序列进行加权。为了提高稀疏成对标签的重要性，本课题将传统的注意力机制扩展到成对关系集合中，称为成对注意力机制。给定标签描述表达$\vec{v}^{(l,i)}$ 和 $\vec{v}^{(l,j)}$，成对注意力矩阵计算如下：
 
 \begin{equation}\label{eq:similiar}
 P(l^{(i)},l^{(j)})=\frac{\vec{v}^{(l,i)}\cdot\vec{v}^{(l,j)}}{\sum_{j=1,j\neq i}^{|C|}\vec{v}^{(l,i)}\cdot\vec{v}^{(l,j)}}
@@ -164,7 +175,7 @@ l_{dyn}=\sum_{x^{(k)}\in X}\sum_{y_i\in Y^{(k)}}\log\left[1+exp(-margin(x^{(k)},
 $P(l^{(i)},l^{(j)})=1$，在初始阶段之后，假定已经获得了稳定的词向量表达，之后再通过公式\ref{eq:similiar}在每次迭代中计算注意力机制矩阵。算法学习的细节如流程图\ref{alg:algo}所示：
 
 \begin{algorithm}[htbp]
-\caption{Framework of joint learning for our model}
+\caption{联合训练模型框架}
 \label{alg:algo}
 \begin{algorithmic}[1]
 % \Require
@@ -173,11 +184,11 @@ $P(l^{(i)},l^{(j)})=1$，在初始阶段之后，假定已经获得了稳定的�
 % Ensemble of classifiers on former batches, $E_{n-1}$;
 % \Ensure
 % Ensemble of classifiers on the current batch, $E_n$;
-\State Initialize model $\Theta=\{\textbf{W}^{D_V\times |C|},\textbf{V}^I,\textbf{T}^{1\times|C|}$\} randomly
+\State 随机初始化模型参数 $\Theta=\{\textbf{W}^{D_V\times |C|},\textbf{V}^I,\textbf{T}^{1\times|C|}$\}
 \label{code:fram:initialize parameters}
 \State iter = 0
 \label{code:fram:begin}
-\State set $n_{burn} = 1000$
+\State 设置 $n_{burn} = 1000$
 \label{code:fram:setvalue}
 \Repeat
 \label{code:fram:repeat}
@@ -185,23 +196,23 @@ $P(l^{(i)},l^{(j)})=1$，在初始阶段之后，假定已经获得了稳定的�
 \label{code:fram:re_value}
 \If {$iter < n_{burn}$}
 \label{code:fram:if1}
-\State set $P(l^{(i)},l^{(j)}) = 1$
+\State 设置 $P(l^{(i)},l^{(j)}) = 1$
 \label{code:fram:init1}
 \For{$i = 1,...,|X|$}
 \label{code:fram:for1}
-\State for instance $x^{(k)}$
+\State 针对实例 $x^{(k)}$
 \label{code:fram:task_join1}
-\State compute the gradient $\nabla(\theta)$ of Equation(\ref{eq:multi})
+\State 通过公式(\ref{eq:multi})计算梯度$\nabla(\theta)$ 
 \label{code:fram:com_grad}
-\State update model $\theta \leftarrow \theta + \epsilon \nabla(\theta)$
+\State 更新模型$\theta \leftarrow \theta + \epsilon \nabla(\theta)$
 \label{code:fram:update_grad}
 \EndFor
 \Else
 \label{code:fram:else1}
-\State compute $P(l^{(i)},l^{(j)})$ according Equation(\ref{eq:similiar})
+\State 通过公式(\ref{eq:similiar})计算$P(l^{(i)},l^{(j)})$
 \label{code:fram:com_Sim}
 \EndIf
-\Until{(Coverage or $t > num$)}
+\Until{(收敛 或者 $t > num$)}
 \State
 \Return $\{\textbf{W}^{D_V\times |C|},\textbf{V}^I,\textbf{T}^{1\times|C|}\}$;
 \end{algorithmic}
@@ -217,27 +228,28 @@ s(Y^{(k)}|x^{(k)}) &=& \sum_{y_i\in Y^{(k)}}I\Big(\frac{exp(\vec{v}^{(e,k)}\text
 
 \section{实验设置}
 \label{sec:dpam_exper}
-在本节中，通过实验验证本课题提出的模型的有效性。首先介绍实验设置，之后通过对比试验验证模型效果。
+
+在本节中，主要介绍本模型的实验设置，首先介绍实验所使用的数据集，之后介绍对比的基线模型以及实验参数的设置情况。
 
 \subsection{数据集介绍}
 本课题在两个真实数据集上进行实验验证，数据来源于裁判文书网\footnote{http://wenshu.court.gov.cn/Index}。裁判文书网是由中华人民共和国政府开放的网站。它记录了中国超过3000个法院的裁判文书。在本研究中，本课题收集了2014年到2016年的40256个案由是诈骗和其他少量混合罪名相关的裁判文书。
 
-本课题首先对这些数据进行预处理。本课题删除了一些无效数据，之后从剩余的裁判文书中抽取所有的标签集合和案情描述。经过数据预处理，本课题得到包含70个法条标签的17160个诈骗类样本，以及包含30个法条标签的4033个混合数据样本。数据分析如表~\ref{t:statistic}所示。最后，本课题将数据以8比2将数据划分为训练集和测试机两部分。
-\begin{table*}
+本课题首先对这些数据进行预处理。本课题删除了一些无效数据，之后从剩余的裁判文书中抽取所有的标签集合和案情描述。经过数据预处理，本课题得到包含70个法条标签的17160个诈骗案由样本数据的数据集，以及包含30个法条标签的4033个混合案由样本数据的数据集。数据分析如表~\ref{t:statistic}所示。最后，本课题将数据以8比2将数据划分为训练集和测试机两部分。
+\begin{table*}[htb]
 \centering
-\caption{Basic statistics of the two legal case datasets for experiments.}
+\caption{实验所用两个司法数据集信息统计表}
 \label{t:statistic}
 \begin{tabular}{cccccc}
 \hline
-\multirow{2}{*}{dataset} & \multirow{2}{*}{\#evidence} & \multirow{2}{*}{\#article} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\#average \\ evidence length\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\#average article\\ definition length\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\#average article set\\ per evidence\end{tabular}} \\
+\multirow{2}{*}{数据集} & \multirow{2}{*}{样本个数} & \multirow{2}{*}{标签个数} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}平均 \\ 案情长度\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}平均标签\\ 定义长度\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}平均样本\\ 标签个数\end{tabular}} \\
 & & & & & \\ \hline
-Fraud & 17160 & 70 &1455 &136 &4.1 \\
-Civil Action & 4033 & 30 &2533 &123 &2.4 \\ \hline
+诈骗案由数据集 & 17160 & 70 &1455 &136 &4.1 \\
+混合案由数据集 & 4033 & 30 &2533 &123 &2.4 \\ \hline
 \end{tabular}
 \end{table*}
 
 \subsection{模型评估}
-本课题通过和以下模型进行试验对比：
+本课题通过和以下模型进行实验对比进行实验验证：
 \begin{itemize}
     \item \textbf{POP}: 将出现频次最高的K个标签作为测试数据的预测结果（在本模型中，K=5）。
     \item \textbf{BSVM}：一种一阶多标签分类模型\cite{Elisseeff2001A}，在这个模型中，每种标签的预测当作一个二分类问题，之后采用SVM作为分类器对每种标签单独进行分类，之后合并每个分类器的结果。
@@ -255,60 +267,72 @@ Civil Action & 4033 & 30 &2533 &123 &2.4 \\ \hline
 首先，本课题在两个数据集上验证模型的有效性。目的是为了验证分别引入注意力矩阵和动态阈值机制是否有效。为了进行比较，本课题采用相同的参数设置，同样使用320维特征表达进行实验。
 
 \subsubsection{注意力矩阵的性能}
-在本节中，本课题研究注意力矩阵的影响。针对本课题的DPAM模型，将动态阈值机制替换为简单的分割点\cite{Tsoumakas2007Random, clare2001knowledge}用来决定给定案例标签集合的大小。本课题将这个模型命名为静态成对注意力机制模型（简称SPAN）。之后进一步忽略通过标签定义学习到的注意力矩阵的影响（例如，针对注意力矩阵中的元素，设置为固定分数），本课题将消减后的模型称为静态成对模型（简称SPM）。表~\ref{tab:comPairWise}展示了这两种方法的性能对比。从结果中可以得到以下结论：（1）SPAM几乎在两个数据集上所有的评价指标上好于SPM，例如，诈骗案由数据集上，Macro-R, Macro-F1和Jaccard的结果分别提升了$1.8\%$, $1.1\%$, 和 $1.3\%$。（2）与SPM比较，SPAM在Macro-P上的提升非常微小。原因是由于SPAM与SPM相比可以预测出更多的正确标签，但是它不能恰当的处理阈值问题。在预测阶段，一些置信度不高的标签仍旧有效，因此在Macro-P上的性能提升并不明显。
-\begin{table}[t!]
-\caption{\label{tab:comPairWise}Performance comparison over SPM and SPAM on crimes classification in terms of different evaluation metrics. Improvements of SPAM over SPM on Macro-R, Macro-F1 and Jaccard (when applicable) are significant at $p=0.05$.}
+在本节中，本课题研究注意力矩阵的影响。针对本课题的DPAM模型，将动态阈值机制替换为简单的分割点\cite{Tsoumakas2007Random, clare2001knowledge}用来决定给定案例标签集合的大小。本课题将这个模型命名为静态成对注意力机制模型（简称SPAM）。之后进一步忽略通过标签定义学习到的注意力矩阵的影响（例如，针对注意力矩阵中的元素，设置为固定分数），本课题将消减后的模型称为静态成对模型（简称SPM）。表~\ref{tab:comPairWise}展示了这两种方法的性能对比。从结果中可以得到以下结论：（1）SPAM几乎在两个数据集上所有的评价指标上好于SPM，例如，诈骗案由数据集上，Macro-R, Macro-F1和Jaccard的结果分别提升了$1.8\%$, $1.1\%$, 和 $1.3\%$。（2）与SPM比较，SPAM在Macro-P上的提升非常微小。原因是由于SPAM与SPM相比可以预测出更多的正确标签，但是它不能恰当的处理阈值问题。在预测阶段，一些置信度不高的标签仍旧有效，因此在Macro-P上的性能提升并不明显。
+\begin{table}[htb]
+\caption{\label{tab:comPairWise}SPM和SPAM实验对比表}
 \centering
 \begin{tabular}{llclll}
 \toprule%\end{tabular}
-dataset&method & Macro-P & Macro-R & Macro-F1 & Jaccard \\
+数据集&方法 & Macro-P & Macro-R & Macro-F1 & Jaccard \\
 \midrule
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Fruad\\ \end{tabular}} & SPM & 0.572& 0.372& 0.430& 0.768 \\
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}诈骗案由 \\数据集\\ \end{tabular}} & SPM & 0.572& 0.372& 0.430& 0.768 \\
                                                                               & SPAM & 0.574& 0.390& 0.441& 0.781 \\
                                                                               \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Civil \\Action\\ \end{tabular}} & SPM & 0.645& 0.322& 0.424& 0.623 \\
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}混合案由 \\数据集\\ \end{tabular}} & SPM & 0.645& 0.322& 0.424& 0.623 \\
                                                                               & SPAM& 0.649& 0.340& 0.448& 0.626 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsubsection{动态阈值预测器的性能}
-本课题进一步分析了模型中动态阈值预测器的性能。针对本课题的DPA模型，采用消减策略忽略注意力矩阵中的权重，将新模型命名为动态成对模型（简称DPM）。本课题将DPM与几种常见的阈值策略进行比较，例如，分割点策略和线性机制，实验结果展示在表~\ref{tab:comDynamic}中。从实验结果得到一下结论：（1）线性机制\cite{Zhang2014A,Elisseeff2001A}的结果好于ad-hoc\cite{Brinker2008Multilabel,Tsoumakas2007Random}策略。（2）DPM性能好于线性机制。以诈骗案由数据集为例，在Macro-P，Macro-F1和Jaccard上的结果分别提升了$3.1\%$, $0.5\%$, and $0.5\%$。（3）与线性模型相比，DPM在Macro-R上性能提升并不明显。原因是动态阈值机制重点在于如何学习一个鲁棒的阈值边界来剔除不置信的标签，因此，它在Macro-P上的表现要好于Macro-R。
+该表在不同指标上对SPM和SPAM模型在司法分类任务上进行了实验对比，结果显示，SPAM模型相对于SPM模型在Macro-R，Macro-F1，Jaccard指标上性能提升明显。
 
-\begin{table}[t!]
-\caption{\label{tab:comDynamic}Performance comparisons over Cutting Point, linear model, and DPM on crimes classification in terms of different evaluation metrics.}
+\subsubsection{动态阈值预测器的性能}
+本课题进一步分析了模型中动态阈值预测器的性能。针对本课题的DPA模型，采用消减策略忽略注意力矩阵中的权重，将新模型命名为动态成对模型（简称DPM）。本课题将DPM与几种常见的阈值策略进行比较，例如，分割点策略和线性机制，实验结果展示在表~\ref{tab:comDynamic}中。
+
+\begin{table}[hbt]
+\caption{\label{tab:comDynamic}阈值策略对比表}
 \centering
 \setlength{\tabcolsep}{2pt}
 \begin{tabular}{clclll}
 \toprule%\end{tabular}
-dataset&method & Macro-P & Macro-R & Macro-F1 & Jaccard\\
+数据集&方法 & Macro-P & Macro-R & Macro-F1 & Jaccard\\
 \midrule
-\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Fruad\\ \end{tabular}} &Cutting Point & 0.560& 0.371& 0.425& 0.762 \\
-&Linear model & 0.573& 0.372& 0.428& 0.767 \\
+\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}诈骗案由数据集\\ \end{tabular}} &分割点策略 & 0.560& 0.371& 0.425& 0.762 \\
+&线性模型 & 0.573& 0.372& 0.428& 0.767 \\
 &DPM & 0.604& 0.377& 0.433& 0.772 \\
 \hline
-\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Civil Action\\ \end{tabular}} &Cutting Point & 0.513& 0.201& 0.183& 0.438 \\
-&Linear model & 0.393& 0.204& 0.185& 0.435 \\
+\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}混合案由数据集\\ \end{tabular}} &分割点策略 & 0.513& 0.201& 0.183& 0.438 \\
+&线性模型 & 0.393& 0.204& 0.185& 0.435 \\
 & DPM & 0.653& 0.329& 0.457& 0.613 \\
 \bottomrule
 \end{tabular}
 \vspace{-10pt}
 \end{table}
 
+如表所示是分割点策略，线性模型，DPM模型在司法分类任务上不同评价指标实验结果对比，
+从实验结果得到一下结论：（1）线性机制\cite{Zhang2014A,Elisseeff2001A}的结果好于ad-hoc\cite{Brinker2008Multilabel,Tsoumakas2007Random}策略。（2）DPM性能好于线性机制。以诈骗案由数据集为例，在Macro-P，Macro-F1和Jaccard上的结果分别提升了$3.1\%$, $0.5\%$, and $0.5\%$。（3）与线性模型相比，DPM在Macro-R上性能提升并不明显。原因是动态阈值机制重点在于如何学习一个鲁棒的阈值边界来剔除不置信的标签，因此，它在Macro-P上的表现要好于Macro-R。
 
 \subsubsection{子模型性能比较}
-在本节中，本课题将SPAM和DPM和DPAM模型进行对比，以便看到两个子模型的差异。图~\ref{fig:comSubm}展示了三个模型的结果比较。
+在本节中，本课题将SPAM和DPM和DPAM模型进行对比，以便看到两个子模型的差异。图~\ref{fig:comSubm}展示了三个模型的结果比较:
 \begin{figure*}[htbp]%[htbp]
 \centering
 \includegraphics[scale=0.30, clip=true]{./sources/comSubm2.eps}
-\caption{\label{fig:comSubm}Performance comparison of the final DPAM model with its two sub-variant models DPM and SPAM on Fraud dataset in terms of Marco-P, Macro-R, Macro-F1, and Jaccard.}
+\caption{\label{fig:comSubm}DPAM与子模型结果对比图}
 \end{figure*}
 
-从实验结果中，可以得到一个有趣的发现，SPAM在Macro-R上比DPM获得了更好的结果，DPM在Macro-P上比SPAM的结果更好。它意味着SPAM通过注意力机制可以缓解标签不均衡问题，DPM通过调整不同标签的阈值可以更准确地预测标签。最后，通过多任务方式联合学习两个子模型，DPAM在所有指标上获得了最好的结果。
+该图展示了DPAM与DOM，SPAM两个子模型使用Marco-P，Macro-R，Macro-F1作为评价指标在诈骗案由数据集上的实验结果。从实验结果中，可以得到一个有趣的发现，SPAM在Macro-R上比DPM获得了更好的结果，DPM在Macro-P上比SPAM的结果更好。它意味着SPAM通过注意力机制可以缓解标签不均衡问题，DPM通过调整不同标签的阈值可以更准确地预测标签。最后，通过多任务方式联合学习两个子模型，DPAM在所有指标上获得了最好的结果。
 
 
-\subsubsection{Comaprison against baselines}
-本课题进一步将DPAM模型与基线方法进行对比。在两个数据集上的实验结果如图~\ref{fig:comMain}。从实验结果中由以下发现：
+\subsubsection{与基线模型的实验对比}
+本课题进一步将DPAM模型与基线方法进行对比。在两个数据集上的实验结果如图~\ref{fig:comMain}。
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[scale=0.25, clip=true]{./sources/comMain.eps}
+\caption{\label{fig:comMain}诈骗案由数据集DPAM与基线模型实验对比图}
+\end{figure*}
+
+该实验中特征维度设置从64到320不等，从实验结果中有以下发现：
 \begin{itemize}
     \item 1） 毫不惊讶POP在所有模型中的结果最差，这体现了判决预测是一项不容易的工作。这是由于司法领域标签集合的分布是不规则的，因此对不同的样本预测相同的标签是不恰当的。
     \item 2）一阶方法（BSVM,ML-KNN）的结果好于POP方法。
@@ -317,11 +341,6 @@ dataset&method & Macro-P & Macro-R & Macro-F1 & Jaccard\\
     \item 5）CC结果好于BSVM，但是性能提升有限。这个原因是因为，作为链式方法，CC容易受到误差传播的影响\cite{KubatSD10}。例如，当一个分类器误分类了一个像本，错误标签信息将会被传递到下一个分类器。
     \item 6）最后，当利用多任务方式同时学习阈值预测器和多标签分类，DPAM在所有指标上获得了最好的结果。例如，与第二名的方法（TEXTCNN-MLL）进行对比，在Macro-P，Macro-R，Macro-F1和Jaccard的结果分别提升了$2.5\%$, $4.3\%$, $3.5\%$ and $2.0\%$，结果提升明显。
 \end{itemize}
-\begin{figure*}[htbp]
-\centering
-\includegraphics[scale=0.25, clip=true]{./sources/comMain.eps}
-\caption{\label{fig:comMain}Performance comparison of DPAM among POP, BSVM, ML-KNN, BP-MLL, CC, and TextCNN-MLL over Fraud dataset. The dimensionality is increased from 64 to 320.}
-\end{figure*}
 
 \section{分析与讨论}
 \label{sec:dpam_analysis}
@@ -329,32 +348,31 @@ dataset&method & Macro-P & Macro-R & Macro-F1 & Jaccard\\
 为了学习提出的DPA模型，本课题利用burn-in方法进行优化。该方法中参数$n_{burn}$需要进行设置。本课题对$n_{burn}$的影响进行挖掘研究。
 
 具体地，本课题在诈骗案由数据集上尝试了$n_{burn}\in \{0,200,400,600,800,1000,1200\}$。图~\ref{fig:comS}展示了在特征维度为320时不同burn-in值情况下Macro-F1的结果。
-\begin{figure}[!t]%[htbp]
+\begin{figure}[htb]%[htbp]
 \vspace{-10pt}
 \centering
 \includegraphics[scale=0.35, clip=true]{./sources/comS.eps}
 \vspace{-20pt}
-\caption{\label{fig:comS} Performance variation in terms of Macro-F1 against the number of burn-in on two datasets. The number of burn-in is increased from 0 to 1200.}
+\caption{\label{fig:comS} 不同burn-in大小影响实验结果图}
 \vspace{-10pt}
 \end{figure}
 
-从实验结果中，可以得到以下结论：
+该实验中burn-in大小由0到1200不断增加，从实验结果中，可以得到以下结论：
 \begin{itemize}
     \item 随着$n_{burn}$不断增大，Macro-F1的结果同时提升。
     \item 当$n_{burn}$的值持续增大，两次不同值下的性能差异越来越小。例如，当$n_{burn}$ 从800增加到1000时，Macro-F1上的相对性能提升由0.3\%。它表示在800词迭代之后，已经获得了相对稳定的词特征表达，如果继续增加迭代次数，继续提升性能变得更困难。因此，在本模型的对比实验中，将$n_{burn}$ 设置为1000。
 \end{itemize}
 
 \subsection{案例分析}
-为了更好地理解为什么DPAM可以比其他模型获得更好的性能，在本章节中，本课题进行案例分析，比较DPAM和第二名的模型TEXT-CNN的性能。以诈骗案由数据集为例，首先根据出现次数将70个标签进行排序，之后将数据按标签分成7组，每组包含10个标签。通过这种方式，第一组数据包含了出现次数最多的10个标签，最后一组包含了最稀疏的10个标签。
+为了更好地理解为什么DPAM可以比其他模型获得更好的性能，在本章节中，本课题进行案例分析，比较DPAM和第二名的模型TEXT-CNN的性能。以诈骗案由数据集为例，首先根据出现次数将70个标签进行排序，之后将数据按标签分成7组，每组包含10个标签。通过这种方式，第一组数据包含了出现次数最多的10个标签，最后一组包含了最稀疏的10个标签。给定这个条件，本课题比较了在第一组数据上的模型性能，进行6次重复实验，每次添加下一组数据进行比较。通过这种方式，本课题希望测试当面对标签不均衡问题时，DPAM是否有效。结果展示如图~\ref{fig:comL}：
 
 \begin{figure*}[htbp]%[ht]
 \centering
 \includegraphics[scale=0.30, clip=true]{./sources/comL.eps}
-\caption{\label{fig:comL}Performance comparison among different label group size. The x-axis represents the label size modeled, y-axis represents the performance in terms of different evaluations metrics.
-}
+\caption{\label{fig:comL}不同标签集合分组实验图}
 \end{figure*}
 
-给定这个条件，本课题比较了在第一组数据上的模型性能，进行6次重复实验，每次添加下一组数据进行比较。通过这种方式，本课题希望测试当面对标签不均衡问题时，DPAM是否有效。结果展示如图~\ref{fig:comL}，可以有以下发现：
+其中x轴代表代表标签集合大小，y轴代表不同指标下的模型性能，从实验结果中，可以有以下发现：
 \begin{itemize}
     \item DPAM和TEXTCNN-MLL的结果在考虑更多标签时下降，这与期望的结果一致，当考虑更稀疏的标签，会导致模型结果的降低。
     \item DPAM在添加到第5组数据时，指标全面超越TEXTCNN-MLL。一个有趣的现象是，当之后添加更多组数据时，性能差距越来越大。这意味着DPAM通过引入注意力机制矩阵可以缓解标签不均衡问题。
