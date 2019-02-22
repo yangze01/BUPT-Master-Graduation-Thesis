@@ -10,38 +10,88 @@
 %% 
 
 \chapter{基于递归注意力机制的模型}
-
+本章主要提出了一种基于递归注意力机制的模型。首先章节~\ref{sec:ran_intro}描述了算法的研究背景；接着，
+在章节~\ref{sec:ran_algori}中介绍了基于递归注意力机制的模型结构，包括算法的设计、模型的学习与预测等过程；
+章节~\ref{sec:ran_exper}中介绍实验设置相关内容，对实验数据集，对比方法等进行介绍；章节~\ref{sec:ran_exper_result}
+对实验结果进行分析，章节\ref{sec:ran_analysis}对实验结果进行进一步的分析和讨论，章节\ref{sec:ran_conclu}对本章内容进行总结。
 
 \section{引言}
+\label{sec:ran_intro}
+法条语义信息（例如，法条的定义）为法官进行正确的决策提供了有效的属性信息。表~\ref{similar_article}展示了两个相似的法条。具体来讲，给定案情描述，对法官来说，一个正常的步骤是法官首先浏览案情，之后浏览所有的法条，挑选与给定案情相关的候选法条（例如，刑法第263条和刑法第264条都与盗窃罪相关，它们在法条定义中有相似的文本描述）。之后通过对案情和候选法条进行详细的语义分析最终挑选正确的法条。这个过程往往会重复若干次之后才能得到最终的判决结果。
+
+\begin{table}[t!]
+    \caption{法条定义中相关法条}
+    \label{t:similar_article}
+    \centering
+    \begin{tabular}{lp{12cm}p{7cm}}
+    \hline
+    &\emph{\textbf{刑法第一百九十七条}: 使用伪造、变造的国库券或者国家发行的其他有价证券，进行\emph{\textbf{诈骗}}活动，数额较大的，处五年以下有期徒刑或者拘役... \newline
+    \textbf{刑法第一百九十一条}: 明知是毒品犯罪、黑社会性质的组织犯罪、恐怖活动犯罪、走私犯罪、贪污贿赂犯罪、破坏金融管理秩序犯罪、\emph{\textbf{金融诈骗}}犯罪的所得及其产生的收益，为掩饰、隐瞒其来源和性质，有下列行为之一的，没收实施以上犯罪的所得及其产生的收益...}\\
+    \hline
+    \end{tabular}
+\end{table}
+
+之前的工作，通常忽略了标签语义信息进行预测。此外，案情与法条语义之间的重复迭代信息被忽略，因此之前的算法性能是十分有限的。在本章中，为了解决这些问题，本课题提出了一种递归注意力网络（简称RNN）。具体来讲，RAN利用LSTM将案情描述和法条定义映射到一个低维空间。自注意力机制用来获取案情和法条自身的内部信息。协同注意力机制用来选择有效的语义信息对案情和法条进行正确的匹配。最后一个递归单元用来建模案情和法条之间的交互信息。
 
 
-\section{DPAM算法设计}
-
+\section{RAN算法设计}
+在本节中，针对提出了RAN模型进行详细的介绍，之后对算法的学习和预测过程进行介绍。
+\label{sec:ran_algori}
 \subsection{编码层}
+让 $x^{(i)} = {\{w_1, w_2, w_3, \dots, w_m\}}$表示有$m$个词的案情描述， $l^{(j)} = {\{w_1, w_2, w_3, \dots, w_n\}}$表示有$n$个词的法条定义，$w_i$代表第$i$个词的词袋表示，让$\textbf{V}^I=\{\vec{v}^I_t\in \mathbb{R}^{D_v}|t=1,\dots,N\}$表示所有词向量的连续空间。
 
+针对每个案情描述和法条定义，本课题将词向量聚合作为案情表示和标签表示，一个双向LSTM(简称Bi-LSTM)用来计算每个词在时刻$t$的隐层状态，其计算过程如公式~\ref{eq:lstm}：
+\begin{equation}\label{eq:lstm}
+    \begin{aligned}
+        \overrightarrow{h_t}&=\overrightarrow{\text{LSTM}}(\overrightarrow{h}_{t-1}, w_t)\\
+        \overleftarrow{h_t}&=\overrightarrow{\text{LSTM}}(\overleftarrow{h}_{t-1}, w_t)\\
+    \end{aligned}
+\end{equation}
+
+利用Bi-LSTM，本模型通过拼接两个方向的LSTM的隐层状态组成第$i$个词的隐层表示，$\vec{v}_t=[\overrightarrow{h_t};\overleftarrow{h_t}]$，之后案情序列 $x^{(i)}$ 和法条序列$l^{(j)}$被分别映射到连续的空间$\textbf{H}_e^{(i)}=[\vec{v}_e^{i}(1), \vec{v}_e^{i}(2), \dots, \vec{v}_e^{i}(m)]$，
+$\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)]$。
 \subsection{自注意力层}
 
-\subsection{递归层}
+在案情描述文档中，不同的词拥有不同的重要程度用于支持法官判决，法官需要详细的阅读案情描述来确认其中的重要犯罪情节。相似的，法条定义中不同的词也有不同的重要程度。在刑法中，有许多易混淆的罪名，比如盗窃罪和抢劫罪，故意杀人和过世致人死亡，它们在法条定义中只有一些细微的差别。例如，是否在非法占有过程中使用暴力，犯罪者在非法占有中使用暴力，是否是由犯罪者故意造成受害人死亡。在进行判决的过程中，法官需要根据法条定义中的差异信息来确认被告人违反了哪些法条。
 
+受自注意力机制\cite{VaswaniSPUJGKP17}的启发，给定案情描述或者法条定义，本课题根据词的重要程度针对文本中的不同词分配不同的权重。这种机制将查询和一系列键值对映射到输出，查询，键，值和输出拥有同样的维度。这本模型中，查询，键，值都是编码层的输出$\textbf{H}_e^{(i)}$ and $\textbf{H}_a^{(j)}$，多头注意力机制允许模型对来自不同子空间的信息在不同位置进行加权。权重计算过程如下：
+\begin{equation}\label{eq:self_attention}
+    head_i = Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_k}})V
+\end{equation}
+
+\begin{equation}\label{eq:multi_head_attention}
+    \begin{aligned}
+        &MultiHead(Q,K,V) = \\
+        &Concat(head_1,\dots,head_h)W^{O} \\            
+    \end{aligned}
+\end{equation}
+
+其中，$Q,K,V$代表打包的查询，键值，$d_k$和$d_v$代表查询和值的维度，投影$W_i^Q \in \mathbb{R}^{d_{model} \times d_k}, W_i^K 
+\in \mathbb{R}^{d_{model} \times d_k},W_i^V \in \mathbb{R}^{d_{model} \times d_v}, W^O \in \mathbb{R}^{hd_v \times d_{model}}$是参数矩阵。利用自注意力机制，本课题将$\textbf{H}_e^i$和$\textbf{H}_a^j$映射到另外一个相当大小的序列空间 $\textbf{H}_{e,s}^{(i)} = [\vec{v}_{e,s}^{(i)}(1), \vec{v}_{e,s}^{(i)}(2), \dots, \vec{v}_{a,s}^{(t)}(t)]$. and $\textbf{H}_{a,s}^{(j)}=[\vec{v}_{a,s}^{(j)}(1), \vec{v}_{a,s}^{(j)}(2), \dots, \vec{v}_{a,s}^{(j)}(t)]$。
+\subsection{递归层}
+在司法领域，法官需要仔细阅读案情描述以便获得重要信息，以便找出相关法条作为候选，之后针对案情描述和相关法条进行详细的分析，得到最终的判决结果，这个过程通过需要重复多次来进行最后的决策。与Cui等人\cite{CuiCWWLH17}提出的不同，不是利用简单的源文本到目标文本之间的交互信息，本课题设计了一种递归注意力机制单元用于建模法官的重复阅读行为。
 \subsection{输出层}
 
 \subsection{模型学习与预测}
 
 
 \section{实验设置}
-
+\label{sec:ran_exper}
 \subsection{数据集介绍}
 
 \subsection{模型评估}
 
 \section{实验结果}
-
+\label{sec:ran_exper_result}
 \subsection{Comparison against Baselines}
 
 \section{分析与讨论}
-
+\label{sec:ran_analysis}
 \subsection{The impact of recurrent layer}
 
 \subsection{Ablation test}
+
+\section{本章小结}
+\label{sec:ran_conclu}
 
 % \chapterbib
