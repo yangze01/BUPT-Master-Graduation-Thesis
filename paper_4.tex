@@ -10,10 +10,7 @@
 %% 
 
 \chapter{基于递归注意力机制的模型}
-本章主要提出了一种基于递归注意力机制的模型。首先章节~\ref{sec:ran_intro}描述了算法的研究背景；接着，
-在章节~\ref{sec:ran_algori}中介绍了基于递归注意力机制的模型结构，包括算法的设计、模型的学习与预测等过程；
-章节~\ref{sec:ran_exper}中介绍实验设置相关内容，对实验数据集，对比方法等进行介绍；章节~\ref{sec:ran_exper_result}
-对实验结果进行分析，章节\ref{sec:ran_analysis}对实验结果进行进一步的分析和讨论，章节\ref{sec:ran_conclu}对本章内容进行总结。
+本章主要提出了一种基于递归注意力机制的模型。首先章节~\ref{sec:ran_intro}描述了算法的研究背景；接着，在章节~\ref{sec:ran_algori}中介绍了基于递归注意力机制的模型结构，包括算法的设计、模型的学习与预测等过程；章节~\ref{sec:ran_exper}中介绍实验设置相关内容，对实验数据集，对比方法等进行介绍；章节~\ref{sec:ran_exper_result}对实验结果进行分析，章节\ref{sec:ran_analysis}对实验结果进行进一步的分析和讨论，章节\ref{sec:ran_conclu}对本章内容进行总结。
 
 \section{引言}
 \label{sec:ran_intro}
@@ -296,9 +293,7 @@ CAIL2018             & 1,710,856                                                
         \end{tabular}
 \end{table*}
 
-其中MP，MR，MF和JS分别代表Macro-P，Macro-R，Macro-F1和杰卡德相关系数（所有数值的百分比符号均被省略）。每行最好的实验结果用下划线进行了标注，最后一列代表与最好的基线模型相关性能提升的多少。
-
-本课题将对比的模型分为三个大类别，浅层模型，基于神经网络的模型以及基于注意力机制的模型。从结果中，可以得到以下结论：
+其中MP，MR，MF和JS分别代表Macro-P，Macro-R，Macro-F1和杰卡德相关系数（所有数值的百分比符号均被省略）。每行最好的实验结果用下划线进行了标注，最后一列代表与最好的基线模型相关性能提升的多少。本课题将对比的模型分为三个大类别，浅层模型，基于神经网络的模型以及基于注意力机制的模型。从结果中，可以得到以下结论：
 \begin{itemize}
     \item 毫不惊讶，\textbf{MLKNN}和\textbf{BR}的在所有指标上结果最差，因为这两种方法将多标签分类转换为单标签分类。
     \item \textbf{CC}方法比\textbf{MLKNN}和\textbf{BR}要稍好，这是由于\textbf{CC}建模了标签关联。
@@ -335,8 +330,8 @@ CAIL2018             & 1,710,856                                                
 为了进一步验证，本课题进行了不同程度的消融实验，将递归层移去（简称\textbf{R-r}），将自注意力层移去（简称R-s）分别进行实验。实验结果如表~\ref{t:ablation}所示：
 \begin{table}[htbp]
     \centering
-    \label{t:ablation}
     \caption{CAIL small数据集消融实验}
+    \label{t:ablation}
     \begin{tabular}{ccccccc}
         \hline
         \textbf{数据集}                                                                & \textbf{方法} & \textbf{MP} & \textbf{MR}    & \textbf{MF}    & \textbf{JS} \\ \hline

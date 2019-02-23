@@ -1,4 +1,8 @@
-{"latex-workshop.latex.tools": [
+{
+    "editor.wordWrap":"on",
+    "editor.wrappingColumn":0,
+    "editor.tabSize": 4,
+    "latex-workshop.latex.tools": [
     {
         // 编译工具和命令
         "name": "xelatex",
@@ -92,7 +96,7 @@
   "*.xml"
   ],
   "latex-workshop.view.pdf.viewer": "tab",
-  "latex-workshop.latex.autoClean.run": "onBuilt",
+"latex-workshop.latex.autoClean.run": "onBuilt",
 //   "latex-workshop.latex.autoBuild.onSave.enabled": false,
 //   "latex-workshop.latex.autoBuild.run": "never",
   }
