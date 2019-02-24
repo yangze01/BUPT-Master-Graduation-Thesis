@@ -22,7 +22,7 @@
 \begin{figure*}[htb]
 \centering
 % \includegraphics[scale=0.5,clip=true]{1.eps}
-\includegraphics[scale=0.48,viewport=0 0 450 350,clip=true]{./sources/1.eps}
+\includegraphics[scale=0.5,viewport=0 0 450 350,clip=true]{./sources/dpam_statistic1.eps}
 \caption{\label{fig:dis1}样本平均标签个数分布统计图}
 \end{figure*}
 
@@ -32,7 +32,7 @@
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.48,clip=true]{./sources/2.eps}
+\includegraphics[scale=0.5,clip=true]{./sources/dpam_statistic2.eps}
 \caption{\label{fig:tail}样本标签出现次数统计图}
 其中，x代表按出现频次排序的标签，y代表标签出现的次数。
 \end{figure*}
@@ -68,7 +68,7 @@
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.48,viewport=0 30 980 500,clip=true]{./sources/DPAM.eps}
+\includegraphics[scale=0.48,viewport=0 30 980 500,clip=true]{./sources/dpam_DPAM.eps}
 \vspace{-10pt}
 \caption{\label{fig:model} 动态成对注意力机制模型结构图 }
 \vspace{-5pt}
@@ -309,7 +309,7 @@ s(Y^{(k)}|x^{(k)}) &=& \sum_{y_i\in Y^{(k)}}I\Big(\frac{exp(\vec{v}^{(e,k)}\text
 在本节中，本课题将SPAM和DPM和DPAM模型进行对比，以便看到两个子模型的差异。图~\ref{fig:comSubm}展示了三个模型的结果比较:
 \begin{figure*}[htbp]%[htbp]
 \centering
-\includegraphics[scale=0.30, clip=true]{./sources/comSubm2.eps}
+\includegraphics[scale=0.30, clip=true]{./sources/dpam_comSubm2.eps}
 \caption{\label{fig:comSubm}DPAM与子模型结果对比图}
 \end{figure*}
 
@@ -321,8 +321,8 @@ s(Y^{(k)}|x^{(k)}) &=& \sum_{y_i\in Y^{(k)}}I\Big(\frac{exp(\vec{v}^{(e,k)}\text
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[scale=0.25, clip=true]{./sources/comMain.eps}
-\caption{\label{fig:comMain}诈骗案由数据集DPAM与基线模型实验对比图}
+\includegraphics[scale=0.25, clip=true]{./sources/dpam_comMain.eps}
+\caption{\label{fig:comMain}DPAM与基线模型实验对比图}
 \end{figure*}
 
 该实验中特征维度设置从64到320不等，从实验结果中有以下发现：
@@ -344,7 +344,7 @@ s(Y^{(k)}|x^{(k)}) &=& \sum_{y_i\in Y^{(k)}}I\Big(\frac{exp(\vec{v}^{(e,k)}\text
 \begin{figure}[htb]%[htbp]
 \vspace{-10pt}
 \centering
-\includegraphics[scale=0.35, clip=true]{./sources/comS.eps}
+\includegraphics[scale=0.5, clip=true]{./sources/dpam_comS.eps}
 \vspace{-20pt}
 \caption{\label{fig:comS} 不同burn-in大小影响实验结果图}
 \vspace{-10pt}
@@ -361,7 +361,7 @@ s(Y^{(k)}|x^{(k)}) &=& \sum_{y_i\in Y^{(k)}}I\Big(\frac{exp(\vec{v}^{(e,k)}\text
 
 \begin{figure*}[htbp]%[ht]
 \centering
-\includegraphics[scale=0.30, clip=true]{./sources/comL.eps}
+\includegraphics[scale=0.30, clip=true]{./sources/dpam_comL.eps}
 \caption{\label{fig:comL}不同标签集合分组实验图}
 \end{figure*}
 

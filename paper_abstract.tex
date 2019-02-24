@@ -1,16 +1,21 @@
 \begin{cabstract}
-  中、英文摘要位于声明的次页，摘要应简明表达学位论文的内容要点，体现研究工作的核心思想。
-  重点说明本项科研的目的和意义、研究方法、研究成果、结论，注意突出具有创新性的成果和新见解的部分。
+随着信息技术的发展，各行各业都积累的客观的数据，为了应对信息爆炸带来的挑战，迫切需要一些信息技术手段，对这些数据进行分析帮助人们解决现实生活中的一些实际问题，解放人类的生产力。在司法领域，法官通常阅读案情描述，根据相关法条决定最终罪名判定，这个任务是十分耗时并且需要额外的专业知识的。通过技术手段，解决以案情描述为输入，相关法条为输出解决判决预测问题，可以有效节约人力成本，使司法判决更加准确有效。
 
-  关键词是为文献标引工作而从论文中选取出来的、用以表示全文主题内容信息的术语。
-  关键词排列在摘要内容的左下方，具体关键词之间以均匀间隔分开排列，无需其它符号。
+本课题将司法判决预测问题转换为多标签分类问题，多标签分类主要存在两方面的问题，一方面，不同标签出现的数量有很大的差异，称为标签不均衡问题，占多数的标签在学习过程中往往会与少数标签共同参与误差计算，这会导致少数标签分类在预测过程中偏向于向数量占比多的标签进行预测，造成预测结果的不准确，因此是本课题需要解决的一个重要问题。另一方面，现有的多标签分类模型往往标签关联信息进行学习，称为标签关联性问题，它们往往从标签本身共现关系进行建模，忽略了标签本身的语义信息。基于上述问题，本课题提出两种模型用于判决预测。
+
+首先，本课题提出了一种统一的动态成对注意力机制模型（简称DPAM）。DPAM采用多任务学习框架，联合学习多标签分类器和阈值预测器，因此DPAM可以利用两个任务之间的信息传递提升模型的泛化性能。此外，基于法条定义构建成对注意力机制，引入多标签分类模型用于缓解标签不均衡问题。在两个真实数据集上的实验，证明了模型的有效性。
+
+其次，本课题提出了一种递归注意力机制（简称RAN）。RAN利用LSTM对案情描述和法条定义文本同样建模特征，通过递归结构建模法官交替阅读案情描述和法条之间的过程，将判决预测问题转换为案情描述与法条定义之间的匹配问题。在三个真实数据集的实验，证明RAN可以有效提升判决预测性能。
+
 \end{cabstract}
 
 \begin{eabstract}
- The Chinese and English abstract should appear after the declaration page.
- The abstract should present the core of the research work, especially the purpose and importance of the research, the method adopted, the results, and the conclusion.
+With the development of information technology, objective data accumulated by all walks of life, in order to cope with the challenges brought about by information explosion, urgently need some information technology means, analyze these data to help people solve some practical problems in real life, liberate Human productivity. In the judicial field, judges usually read the case description and decide on the final charge according to the relevant laws. This task is very time consuming and requires additional professional knowledge. Through technical means, the case description is taken as input, and the relevant law strip solves the problem of judgment prediction for output, which can effectively save labor cost and make the judicial judgment more accurate and effective.
 
- Key words are terms selected for documentation indexing, which should present the main contributions of the thesis.
- Key words are aligned at the bottom left side of the abstract content.
- Key words should be separated by spaces but not any other symbols.
+This topic transforms the judicial decision prediction problem into a multi-label classification problem. There are two main problems in multi-label classification. On the one hand, the number of different labels appears to be very different, which is called label imbalance problem. The majority label is in In the process of learning, a small number of tags are often involved in the error calculation. This leads to a small number of tag classifications in the prediction process, which tends to predict the number of tags with a large proportion, resulting in inaccurate prediction results. Therefore, this problem needs to be solved. important question. On the other hand, the existing multi-label classification model often learns the label association information, which is called the label association problem. They often model the co-occurrence relationship of the label itself, ignoring the semantic information of the label itself. Based on the above problems, this paper proposes two models for decision prediction.
+
+Firstly, we propose a unifed Dynamic Pairwise Attention Model (DPAM for short). Specifcally, DPAM adopts the multi-task learning paradigm to learn the multi-label classifer and the threshold predictor jointly, and thus DPAM can improve the generalization performance by leveraging the information learned in both of the two tasks. In addition, a pairwise attention model based on article defnitions is incorporated into the classifcation model to help alleviate the label imbalance problem. Experimental results on two real-world datasets show that our proposed approach signifcantly outperforms state-of-the-art multi-label classifcation methods.
+
+Secondly, we propose a Recurrent Attention Network(RAN for short). RAN utilizes a LSTM to obtain both evidence and article representations, then a recurrent process is designed to model the iterative interactions between evidences and articles to make a correct match. Experimental results on real-world datasets demonstrate that our proposed model achieves significant improvements over all of the baseline methods.
+
 \end{eabstract}
