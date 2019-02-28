@@ -22,6 +22,9 @@ final_paper.pdf
 *.bcf
 *.xml"
 20190224.pdf
+<<<<<<< HEAD
 final_paper.pdf
 20190227.pdf
+=======
+>>>>>>> 84ab672d1fd54709564fd3b6d87d1eed0bf223a7
 *.pdf
