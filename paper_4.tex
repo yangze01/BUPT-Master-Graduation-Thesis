@@ -32,9 +32,9 @@
 
 总体来说，本章主要贡献如下：
 \begin{itemize}
-    \item 本章将判决预测问题转换为匹配问题，以便分析法条定义与案情描述之间的语义信息。
-    \item 本章设计了一种新型递归单元用于建模法条定义与案情描述之间的重复语义交互信息。
-    \item 本章在真实数据上进行了有效的实验验证，本章模型结果有效超过了基线模型，进一步的分析证明了本章提出的递归注意力机制方法的有效性。
+    \item 本课题将判决预测问题转换为匹配问题，以便分析法条定义与案情描述之间的语义信息。
+    \item 本课题设计了一种新型递归单元用于建模法条定义与案情描述之间的重复语义交互信息。
+    \item 本课题在真实数据上进行了有效的实验验证，本章模型结果有效超过了基线模型，进一步的分析证明了本章提出的递归注意力机制方法的有效性。
 \end{itemize}
 
 \section{RAN算法设计}
@@ -180,34 +180,34 @@ $\textbf{H}_a^{(i)}=[\vec{v}_a^{i}(1), \vec{v}_a^{i}(2), \dots, \vec{v}_a^{i}(n)
     % \Ensure
     % Ensemble of classifiers on the current batch, $E_n$;
     \State 随机初始化模型参数 $\Theta=\{\textbf{W}^{D_V\times |C|},\textbf{V}$\}
-    \label{code:fram:initialize parameters}
+    \label{code:fram:ran initialize parameters}
     \State iter = 0
-    \label{code:fram:begin}
+    \label{code:fram:ran begin}
     \Repeat
-    \label{code:fram:repeat}
+    \label{code:fram:ran repeat}
         \State $iter \leftarrow iter+1$
-        \label{code:fram:re_value}
+        \label{code:fram:ran re_value}
         \For{$i = 1,...,|X|$}
-        \label{code:fram:for1}
+        \label{code:fram:ran for1}
             \State 针对实例 $x^{(i)}$
-            \label{code:fram:task_join1}
+            \label{code:fram:ran task_join1}
             \State 编码案情描述和法条定义 $H_e^{(i)}$, $H_a$
-            \label{code:fram:encode}
+            \label{code:fram:ran encode}
             % \State self attention encode
             % \label{code:fram:self_at_encode}
             \State set $n_{layer} = 3$
-            \label{code:fram:recurrent_layer}
+            \label{code:fram:ran recurrent_layer}
             \Repeat
-            \label{code:fram:repeat_recurrent}
+            \label{code:fram:ran repeat_recurrent}
                 \State $n_{layer} \leftarrow n_{layer} - 1$ 
-                \label{code:fram:iter_layer}
+                \label{code:fram:ran iter_layer}
                 \State 计算交互信息
-                \label{code:fram:compute_iteraction}
+                \label{code:fram:ran compute_iteraction}
             \Until{$n_{layer} < 0$}
             \State  通过公式(\ref{eq:loss})计算模型梯度$\nabla(\theta)$
-            \label{code:fram:com_grad}
+            \label{code:fram:ran com_grad}
             \State 通过$\theta \leftarrow \theta + \epsilon \nabla(\theta)$更新模型参数
-            \label{code:fram:update_grad}
+            \label{code:fram:ran update_grad}
         \EndFor
         
     \Until{(收敛或者$t > num$)}
@@ -359,6 +359,6 @@ CAIL2018             & 1,710,856                                                
 这进一步证明了递归层可以有效建模获取重复的语义信息用于提升判决预测的性能。
 \section{本章小结}
 \label{sec:ran_conclu}
-在本章节张，本课题提出了一种递归注意力网络，可以模拟法官重复交替阅读法案和法条的过程，这种方法可以有效利用案情描述和法条定义之间的交互语义特征，扩展实验证明提出的模型性能远好于其他模型。进一步的分析证明本模型不仅能够获取标签关联信息，还能通过递归单元获取多层次的注意力信息。
+在本章中，本课题提出了一种递归注意力网络，可以模拟法官重复交替阅读法案和法条的过程，这种方法可以有效利用案情描述和法条定义之间的交互语义特征，扩展实验证明提出的模型性能远好于其他模型。进一步的分析证明本模型不仅能够获取标签关联信息，还能通过递归单元获取多层次的注意力信息。
 
 % \chapterbib
