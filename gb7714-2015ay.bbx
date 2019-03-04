@@ -1705,23 +1705,23 @@ test {\iflistundef{location}} and test {\iflistundef{institution}}%
 \renewbibmacro*{publisher+location+date}{\bibpubfont%
 \iftoggle{bbx:gbpub}%
 {\testCJKfirst{userd}%
-\ifboolexpr{%
-test {\iflistundef{location}} and test {\iflistundef{publisher}}%
-}{\iftoggle{ifCJKforgbt}{\printtext{[\str@noaddress}\space :\space\str@nopublisher]}%
-{\printtext{[S.l.\space :\space s.n.\adddot]}}%
-}{%
-\iflistundef{location}{%\adddot
-\iffieldequalstr{note}{standard}{}{%从gbt7714-2015标准第19页看到，标准存在出版项时输出，没有时完全省略。
-\iftoggle{ifCJKforgbt}{\printtext{[\str@noaddress]}\addcolon\addspace}{\printtext{[S.l.\adddot]}\addcolon\addspace}%
-}}%  \bibstring{noaddress}
-{\printlist{location}\addcolon\addspace}%
-%\addcolon\addspace%
-\iflistundef{publisher}{%
-\iffieldequalstr{note}{standard}{}{%
-\iftoggle{ifCJKforgbt}{\printtext{[\str@nopublisher]}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}%
-{\printtext{\mkbibbrackets{s.n.}}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}%
-}}%
-{\printlist{publisher}}}%
+% \ifboolexpr{%
+% test {\iflistundef{location}} and test {\iflistundef{publisher}}%
+% }{\iftoggle{ifCJKforgbt}{\printtext{[\str@noaddress}\space :\space\str@nopublisher]}%
+% {\printtext{[S.l.\space :\space s.n.\adddot]}}%
+% }{%
+% \iflistundef{location}{%\adddot
+% \iffieldequalstr{note}{standard}{}{%从gbt7714-2015标准第19页看到，标准存在出版项时输出，没有时完全省略。
+% \iftoggle{ifCJKforgbt}{\printtext{[\str@noaddress]}\addcolon\addspace}{\printtext{[S.l.\adddot]}\addcolon\addspace}%
+% }}%  \bibstring{noaddress}
+% {\printlist{location}\addcolon\addspace}%
+% %\addcolon\addspace%
+% \iflistundef{publisher}{%
+% \iffieldequalstr{note}{standard}{}{%
+% \iftoggle{ifCJKforgbt}{\printtext{[\str@nopublisher]}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}%
+% {\printtext{\mkbibbrackets{s.n.}}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}%
+% }}%
+% {\printlist{publisher}}}%
 \setunit*{\addcomma\addspace}%\addcomma\addspace%
 \usebibmacro{date}%
 %\newunit %去掉这个标点
