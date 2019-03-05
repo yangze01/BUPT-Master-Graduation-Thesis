@@ -193,7 +193,7 @@ LSTM，全称长短期记忆网络，是为了解决CNN等模型只能获取局�
 注意力机制是一种广泛应用在深度学习的各个领域的机制，其本质是一种特征加权的方式，注意力在自然语言处理领域的应用最早是在机器翻译领域\cite{bahdanau2014neural}，传统的机器翻译模型通常由编码器-解码器结构组成，编码层即文本表示层，采用文本表示模型对文本进行编码，将输入语句转换成文本表示向量，之后通过解码器对该向量进行解码，将该向量翻译成目标语言。最基本的编码器-解码器结构由RNN构成，RNN由于本身结构的限制，无法得到文本序列的长期依赖，因此，为了解决这个问题，机器翻译模型引入了注意力机制，通过在不同解码阶段不同词重要性的不同，对文本向量进行加权，将语义信息集中在需要的部分。最基本的注意力机制模型如图~\ref{fig:attention}所示：
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.5, clip=true]{./sources/rel_attention.pdf}
+    \includegraphics[scale=0.5, clip=true]{./sources/rel_attention.eps}
     \vspace{-10pt}
     \caption{\label{fig:attention} 注意力机制模型结构图}
     \vspace{-5pt}
