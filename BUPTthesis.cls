@@ -69,7 +69,7 @@
 }
 {%
   \newcommand{\chapterbib}{\relax}
-  \newcommand{\mainbib}{\printbibliography}
+  \newcommand{\mainbib}{\printbibliography[heading=bibintoc,title={\bupt@label@refname}]}
 }
 
 % hyperref
@@ -204,7 +204,7 @@
 
 \newenvironment{notations}
 {%
-  \chapter*{\bupt@label@notations}
+  \chapter{\bupt@label@notations}
   \markboth{\bupt@label@notations}{}
   \begin{longtable}{lp{120mm}}
 }
@@ -212,7 +212,7 @@
 
 \newenvironment{acknowledgement}
 {%
-  \chapter*{\bupt@label@acknowledgement}
+  \chapter{\bupt@label@acknowledgement}
   \markboth{\bupt@label@acknowledgement}{}
 }
 {}
