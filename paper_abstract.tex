@@ -7,6 +7,7 @@
 
 其次，本课题提出了一种递归注意力机制（简称RAN）。RAN利用LSTM对案情描述和法条定义文本同样建模特征，通过递归结构建模法官交替阅读案情描述和法条之间的过程，将判决预测问题转换为案情描述与法条定义之间的匹配问题。在三个真实数据集的实验，证明RAN可以有效提升判决预测性能。
 
+最后，本课题设计并实现了一个原型系统。该原型系统立足法官的基本需求，基于本课题提出的上述两个模型，设计实现了裁判文书要素提取，裁判文书语义匹配，类案检索，判决预测四个功能，在实际场景下对模型的应用进行了实验，有效证明了本课题模型的实际应用价值。
 \end{cabstract}
 
 \begin{eabstract}
@@ -17,5 +18,7 @@ This topic transforms the judicial decision prediction problem into a multi-labe
 Firstly, we propose a unifed Dynamic Pairwise Attention Model (DPAM for short). Specifcally, DPAM adopts the multi-task learning paradigm to learn the multi-label classifer and the threshold predictor jointly, and thus DPAM can improve the generalization performance by leveraging the information learned in both of the two tasks. In addition, a pairwise attention model based on article defnitions is incorporated into the classifcation model to help alleviate the label imbalance problem. Experimental results on two real-world datasets show that our proposed approach signifcantly outperforms state-of-the-art multi-label classifcation methods.
 
 Secondly, we propose a Recurrent Attention Network(RAN for short). RAN utilizes a LSTM to obtain both evidence and article representations, then a recurrent process is designed to model the iterative interactions between evidences and articles to make a correct match. Experimental results on real-world datasets demonstrate that our proposed model achieves significant improvements over all of the baseline methods.
+
+Finally, a prototype system is designed and implemented. The prototype system is based on the basic needs of judges. Based on the above two models proposed in this topic, four functions are designed and implemented, namely, extracting elements of judgment documents, semantic matching of judgment documents, case retrieval and judgment prediction. The application of the model in actual scenarios is experimented, which effectively proves the practical application value of the model.
 
 \end{eabstract}
