@@ -46,6 +46,7 @@
 \subsection{面向司法领域多标签分类的评价指标}
 多标签分类问题与单标签分类问题不同，给定一个样本，其对应的标签可能存在多个，因此在进行多标签分类评估时，需要整体考虑不同标签的影响。本课题采用基于宏平均的方法和杰卡德相似系数两种评价指标进行结果评估。
 \subsubsection{基于宏平均的方法}
+\vspace{-5pt}
 现有的二元评价指标以宏平均和微平均为基础，可以将样本根据真实类别和预测类别划分为：
 \begin{itemize}
     \item 真正例（True Positive，TP）：真实类别为正例，预测类别为正例。
@@ -226,7 +227,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.5, clip=true]{./sources/rel_hard_share.eps}
+    \includegraphics[scale=0.5, viewport=-30 0 650 300, clip=true]{./sources/rel_hard_share.eps}
     \vspace{-10pt}
     \caption{\label{fig:hard_share} 参数硬共享模型结构图}
     \vspace{-5pt}
@@ -240,7 +241,7 @@ a_{ij} = \frac{e_{ij}}{2\sum_{k=1}^{T_x}exp(e_{ik})}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[scale=0.5, clip=true]{./sources/rel_soft_share.eps}
+    \includegraphics[scale=0.5, viewport=0 0 650 350, clip=true]{./sources/rel_soft_share.eps}
     \vspace{-10pt}
     \caption{\label{fig:soft_share} 参数软共享模型结构图}
     \vspace{-5pt}

@@ -43,7 +43,7 @@
 在本节中，针对提出了RAN模型进行详细的介绍，其模型结果如图~\ref{fig:ran_model}，之后对算法的学习和预测过程进行介绍。
 \begin{figure*}[htbp]
     \centering
-    \includegraphics[scale=0.45,viewport=0 30 980 500,clip=true]{./sources/ran_RAN.eps}
+    \includegraphics[scale=0.45,viewport=0 78 980 500,clip=true]{./sources/ran_RAN.eps}
     \vspace{-10pt}
     \caption{\label{fig:ran_model} 递归注意力网络(RAN)模型结构图 }
     \vspace{-5pt}
@@ -268,7 +268,8 @@ CAIL2018             & 1,710,856                                                
 \section{实验结果}
 \label{sec:ran_exper_result}
 \subsection{与基线模型的实验对比}
-本课题将提出的\textbf{SAN}模型与baseline进行了对比，在三个数据集上的性能结果如表~\ref{t:ran_main}所示：\begin{table*}[htbp]
+本课题将提出的\textbf{SAN}模型与baseline进行了对比，在三个数据集上的性能结果如表~\ref{t:ran_main}所示：
+\begin{table*}[htbp]
     \centering
     \caption{RAN与基线模型实验比较表}
     \label{t:ran_main}
@@ -278,10 +279,10 @@ CAIL2018             & 1,710,856                                                
         \multirow{3}{*}{\textbf{数据集}} & \multirow{3}{*}{\textbf{指标}} & \multicolumn{4}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}浅层 \\ 模型\end{tabular}}}} & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}神经网络 \\ 模型\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}注意力 \\ 模型\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}本\\ 模型\end{tabular}}} & \multirow{3}{*}{\textbf{提升}} \\
                                           &                                   & \multicolumn{4}{c|}{}                                                                                   & \multicolumn{2}{c|}{}                                                                                                &                                                                                            &                                                                               &                                   \\
                                           &                                   & MLKNN                    & BR                       & CC                      & SVM                     & TextCNN                                                   & BiLSTM                                                   & DPAM                                                                                       & RAN                                                                          &                                   \\ \midrule
-                                          & MP                                & 59.49                    & 74.28                    & 72.33                   & 67.68                   & 78.53                                                     & 78.81                                                    & 79.39                                                                                      & \underline{\textbf{81.34}}                                                                & \textbf{1.95}                     \\
-                                          & MR                                & 32.14                    & 50.84                    & 53.22                   & 51.37                   & 54.16                                                     & 54.96                                                    & 55.60                                                                                      & \underline{\textbf{55.59}}                                                                & \textbf{0.09}                     \\
-        \textbf{CJO}                      & MF                               & 38.85                    & 57.41                    & 58.60                   & 55.77                   & 61.40                                                     & 62.17                                                    & 62.79                                                                                      & \underline{\textbf{63.28}}                                                               & \textbf{0.49}                     \\
-                                          & JS                                & 53.25                    & 79.40                    & 82.02                   & 83.55                   & 80.25                                                     & 80.40                                                    & 80.76                                                                                      & \textbf{80.81}                                                                & \textbf{0.05}                     \\
+                                          & MP                                & 59.49                    & 74.28                    & 72.33                   & 67.68                   & 78.53                                                     & 78.81                                                    & 79.39                                                                                      & \underline{\textbf{81.52}}                                                                & \textbf{2.13}                     \\
+                                          & MR                                & 32.14                    & 50.84                    & 53.22                   & 51.37                   & 54.16                                                     & 54.96                                                    & 55.60                                                                                      & \underline{\textbf{55.75}}                                                                & \textbf{0.15}                     \\
+        \textbf{CJO}                      & MF                               & 38.85                    & 57.41                    & 58.60                   & 55.77                   & 61.40                                                     & 62.17                                                    & 62.79                                                                                      & \underline{\textbf{63.34}}                                                               & \textbf{0.55}                     \\
+                                          & JS                                & 53.25                    & 79.40                    & 82.02                   & 83.55                   & 80.25                                                     & 80.40                                                    & 80.76                                                                                      &\underline{\textbf{80.96}}                                                                & \textbf{0.20}                     \\
                                           & MP                                & 31.75                    & 41.59                    & 42.12                   & 43.07                   & 78.32                                                     & 79.93                                                    & 80.35                                                                                      & \underline{\textbf{81.23}}                                                                & \textbf{0.88}                     \\
                                           & MR                                & 20.11                    & 30.23                    & 32.49                   & 39.66                   & 54.73                                                     & 57.77                                                    & 62.03                                                                                      & \underline{\textbf{64.90}}                                                                & \textbf{2.87}                     \\
         \textbf{CAIL small}               & MF                               & 22.93                    & 33.57                    & 35.58                   & 40.14                   & 61.35                                                     & 63.98                                                    & 67.42                                                                                      & \underline{\textbf{69.49}}                                                                & \textbf{2.07}                     \\
@@ -292,6 +293,7 @@ CAIL2018             & 1,710,856                                                
                                           & JS                                & 70.28                    & 88.34                    & 90.57                   & 90.92                   & 94.61                                                     & 94.61                                                    & 94.39                                                                                      & \underline{\textbf{94.68}}                                                                & \textbf{0.29}                     \\ \bottomrule
         \end{tabular}
 \end{table*}
+
 
 其中MP，MR，MF和JS分别代表Macro-P，Macro-R，Macro-F1和杰卡德相关系数（所有数值的百分比符号均被省略）。每行最好的实验结果用下划线进行了标注，最后一列代表与最好的基线模型相关性能提升的多少。本课题将对比的模型分为三个大类别，浅层模型，基于神经网络的模型以及基于注意力机制的模型。从结果中，可以得到以下结论：
 \begin{itemize}
@@ -310,7 +312,7 @@ CAIL2018             & 1,710,856                                                
 \begin{figure*}[hbtp]
     \centering
     % \includegraphics[scale=0.5,viewport=0 30 980 500,clip=true]{./sources/n_layers.eps}
-    \includegraphics[scale=0.39, clip=true]{./sources/ran_recurrent_layers.eps}
+    \includegraphics[scale=0.4,viewport=-30 125 1080 455, clip=true]{./sources/recurrent_layers.pdf}
     \vspace{-10pt}
     \caption{\label{fig:n_layers} 递归层数影响实验图}
     \vspace{-5pt}
@@ -338,7 +340,7 @@ CAIL2018             & 1,710,856                                                
         \multirow{4}{*}{\textbf{CJO}}                                                   & \textbf{DPAM}   & 79.39       & 55.60 & 62.79  & 80.76       \\
                                                                                         & \textbf{R-s}    & 80.36       & 55.02 & 62.85  & 80.77       \\
                                                                                         & \textbf{R-r}    & 78.78       & 54.56 & 61.97  & 80.35       \\
-                                                                                        & \textbf{RAN}    & 81.34       & 55.59 & 63.28  & 80.81       \\
+                                                                                        & \textbf{RAN}    & 81.52       & 55.75 & 63.34  & 80.96       \\
         \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}CAIL small\end{tabular}}} & \textbf{DPAM}   & 80.35       & 62.03 & 67.42  & 76.00       \\
                                                                                         & \textbf{R-s}    & 80.2        & 64.94 & 68.98  & 76.58       \\
                                                                                         & \textbf{R-r}    & 79.37       & 62.08 & 66.75  & 76.93       \\
